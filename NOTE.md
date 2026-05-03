@@ -50,3 +50,17 @@
  - Inheritance Expanded - Created hierarchy:Person → User → (StudentUsfer, PremiumUser, AdminUser)
  - Polymorphism Strengthened - Same User reference → different behavior per type
  - Role-Based Design - Student → limited books ;Premium → higher limit ;Admin → no limit
+## Did
+ - Checked empty book title/author ,
+ - Handled invalid menu choices
+ - Prevented incorrect data entry
+ - Exception Handling 
+ - Wrapped main flow in try-catch 
+ - Prevented system crash on unexpected input 
+ - Handled invalid scanner input safely 
+ - Resource Management 
+ - Closed Scanner properly using finally
+### Final Implementation (As Planned)
+ - Reliability - Program no longer breaks on bad input 
+ - Robust Design - System can handle real user behavior 
+ - Professional Practice - Proper use of try-catch-finally

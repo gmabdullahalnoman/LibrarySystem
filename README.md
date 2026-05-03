@@ -38,3 +38,30 @@ Each concept will be introduced InshaAllah.
 
 The main goal of this project is not only to implement functionality but to build a strong 
 understanding of all OOP principles through structured development.
+
+## Project Summary
+Developed a Java-based Library Management System step by step, evolving it from a simple console
+program into a structured OOP application.
+### OOP Concepts Implemented
+ - Encapsulation - Private fields in Book and User ,Controlled access via getters and methods
+ - Abstraction - LibraryOperations interface defines system behavior ,LibraryService hides internal logic
+ - Inheritance ,Person → base class ,User extends Person Extended into StudentUser, PremiumUser, AdminUser
+ - Polymorphism - Method overriding (borrowBook), Runtime behavior changes based on user type 
+### System Features Built
+- Library Functions - Add books ,Display books ,Borrow books ,Return books 
+- User System - Multiple user roles: Student (limited borrowing), Premium (higher limit), Admin (no limit)
+- Tracks borrowed books per user
+### Runtime System
+ - Console-based menu system 
+ - Scanner-based user input 
+ - Continuous interaction loop
+### Reliability Improvements
+ - Input validation 
+ - Exception handling (try-catch)
+ - Safe scanner usage 
+ - Empty input checks
+
+### Next Upgrades (Planning Stage)
+ - Database Integration
+ - Spring Boot backend system
+ - REST API version
