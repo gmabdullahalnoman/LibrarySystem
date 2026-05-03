@@ -35,3 +35,11 @@
  - Polymorphism (Runtime) - Same method → different behavior based on object
  - Method Overriding - Child classes redefine parent behavior
  - Dynamic Binding - Method decided at runtime (JVM)
+## Did:
+ - Replaced hardcoded flow with interactive menu
+ - Added Scanner for user input
+ - Introduced loop + switch-case for continuous operation
+### OOP / Design Improvements
+ - Real Execution Flow - Program now behaves like a real system, not a demo script
+ - Separation still maintained - Main handles input, LibraryService handles logic
+ - Extensibility - Easy to plug in new features (user types, validation, etc.)
