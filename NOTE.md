@@ -43,3 +43,10 @@
  - Real Execution Flow - Program now behaves like a real system, not a demo script
  - Separation still maintained - Main handles input, LibraryService handles logic
  - Extensibility - Easy to plug in new features (user types, validation, etc.)
+## Did
+ - Allowed user type selection at runtime
+ - Removed fixed default user
+### OOP Improvements
+ - Inheritance Expanded - Created hierarchy:Person → User → (StudentUsfer, PremiumUser, AdminUser)
+ - Polymorphism Strengthened - Same User reference → different behavior per type
+ - Role-Based Design - Student → limited books ;Premium → higher limit ;Admin → no limit

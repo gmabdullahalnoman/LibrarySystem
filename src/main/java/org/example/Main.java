@@ -7,8 +7,34 @@ public class Main {
 
         LibraryOperations library = new LibraryService();
         Scanner sc = new Scanner(System.in);
-        User user = new StudentUser(1, "Default User");
+        System.out.println("Select User Type:");
+        System.out.println("1. Student");
+        System.out.println("2. Premium");
+        System.out.println("3. Admin");
+        System.out.print("Choice: ");
 
+        int type = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("Enter Name: ");
+        String name = sc.nextLine();
+
+        User user;
+
+        switch (type) {
+            case 1:
+                user = new StudentUser(1, name);
+                break;
+            case 2:
+                user = new PremiumUser(1, name);
+                break;
+            case 3:
+                user = new AdminUser(1, name);
+                break;
+            default:
+                System.out.println("Invalid type. Defaulting to Student.");
+                user = new StudentUser(1, name);
+        }
         while (true) {
             System.out.println("\n===== Library Menu =====");
             System.out.println("1. Add Book");
