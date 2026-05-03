@@ -2,24 +2,13 @@ package org.example;
 
 import java.util.ArrayList;
 
-public class User {
+public class User extends Person {
 
-    private int userId;
-    private String name;
     private ArrayList<Book> borrowedBooks;
 
     public User(int userId, String name) {
-        this.userId = userId;
-        this.name = name;
+        super(userId, name);
         this.borrowedBooks = new ArrayList<>();
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void borrowBook(Book book) {

@@ -18,3 +18,11 @@
  - Implemented Abstraction via interface
  - Strong Classes & Objects
  - Clean Encapsulation
+### Did:
+ - Created Person with common fields: id, name
+ - Updated User → now inherits from Person
+ - Removed duplication of user identity fields
+## OOP Improvement
+ - Implemented Inheritance (IS-A relationship)
+ - Improved code reuse 
+ - Prepared structure for future classes (Admin, Member)
