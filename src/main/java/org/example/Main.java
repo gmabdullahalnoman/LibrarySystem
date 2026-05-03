@@ -6,7 +6,7 @@ public class Main {
 
         LibraryOperations library = new LibraryService();
 
-        User user1 = new User(1, "Abdullah");
+        User user1 = new StudentUser(1, "Abdullah");
 
         Book book1 = new Book(101, "Clean Code", "Robert C. Martin");
         Book book2 = new Book(102, "Effective Java", "Joshua Bloch");

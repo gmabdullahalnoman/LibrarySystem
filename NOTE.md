@@ -18,11 +18,20 @@
  - Implemented Abstraction via interface
  - Strong Classes & Objects
  - Clean Encapsulation
-### Did:
+## Did:
  - Created Person with common fields: id, name
  - Updated User → now inherits from Person
  - Removed duplication of user identity fields
-## OOP Improvement
+### OOP Improvement
  - Implemented Inheritance (IS-A relationship)
  - Improved code reuse 
  - Prepared structure for future classes (Admin, Member)
+## Did:
+ - Created StudentUser and PremiumUser
+ - Overrode borrowBook() with limits
+ - Added getBorrowedCount() in User
+ - Updated Main to use child class object
+### OOP Concepts Implemented
+ - Polymorphism (Runtime) - Same method → different behavior based on object
+ - Method Overriding - Child classes redefine parent behavior
+ - Dynamic Binding - Method decided at runtime (JVM)

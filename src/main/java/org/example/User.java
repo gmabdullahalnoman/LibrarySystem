@@ -31,4 +31,7 @@ public class User extends Person {
             System.out.println(book);
         }
     }
+    public int getBorrowedCount() {
+        return borrowedBooks.size();
+    }
 }
