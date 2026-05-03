@@ -1,63 +1,35 @@
 package org.example;
 
-import java.util.Scanner;
-
 public class Main {
-    static void main() {
 
-                Library library = new Library();
-                User user = new User(1, "Default User");
-                Scanner scanner = new Scanner(System.in);
+    public static void main(String[] args) {
 
-                // Sample books
-                library.addBook(new Book(1, "Java Basics", "John Doe"));
-                library.addBook(new Book(2, "OOP Concepts", "Jane Smith"));
-                library.addBook(new Book(3, "Data Structures", "Alice Lee"));
+        LibraryOperations library = new LibraryService();
 
-                int choice;
+        User user1 = new User(1, "Abdullah");
 
-                do {
-                    System.out.println("\n===== Library Menu =====");
-                    System.out.println("1. View Books");
-                    System.out.println("2. Borrow Book");
-                    System.out.println("3. Return Book");
-                    System.out.println("4. View My Books");
-                    System.out.println("0. Exit");
-                    System.out.print("Enter choice: ");
+        Book book1 = new Book(101, "Clean Code", "Robert C. Martin");
+        Book book2 = new Book(102, "Effective Java", "Joshua Bloch");
 
-                    choice = scanner.nextInt();
+        library.addBook(book1);
+        library.addBook(book2);
 
-                    switch (choice) {
-                        case 1:
-                            library.displayBooks();
-                            break;
+        System.out.println("\nAll Books:");
+        library.displayBooks();
 
-                        case 2:
-                            System.out.print("Enter Book ID to borrow: ");
-                            int borrowId = scanner.nextInt();
-                            library.borrowBook(borrowId, user);
-                            break;
+        System.out.println("\nBorrow Book:");
+        library.borrowBook(101, user1);
 
-                        case 3:
-                            System.out.print("Enter Book ID to return: ");
-                            int returnId = scanner.nextInt();
-                            library.returnBook(returnId, user);
-                            break;
+        System.out.println("\nUser Borrowed Books:");
+        user1.showBorrowedBooks();
 
-                        case 4:
-                            user.showBorrowedBooks();
-                            break;
+        System.out.println("\nAll Books After Borrow:");
+        library.displayBooks();
 
-                        case 0:
-                            System.out.println("Goodbye!");
-                            break;
+        System.out.println("\nReturn Book:");
+        library.returnBook(101, user1);
 
-                        default:
-                            System.out.println("Invalid choice.");
-                    }
-
-                } while (choice != 0);
-
-                scanner.close();
-            }
-        }
+        System.out.println("\nFinal Books State:");
+        library.displayBooks();
+    }
+}

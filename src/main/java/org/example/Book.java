@@ -1,6 +1,7 @@
 package org.example;
 
 public class Book {
+
     private int id;
     private String title;
     private String author;
@@ -30,11 +31,7 @@ public class Book {
     }
 
     public void borrowBook() {
-        if (isAvailable) {
-            isAvailable = false;
-        } else {
-            System.out.println("Book is already borrowed.");
-        }
+        isAvailable = false;
     }
 
     public void returnBook() {

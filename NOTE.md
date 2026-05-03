@@ -9,3 +9,12 @@
    Library coordinates between Book and User
    User maintains list of borrowed books
    Book maintains availability state
+
+## Structural improvements
+ - Removed previous design
+ - Introduced LibraryService as logic layer
+ - Added interface-based abstraction
+### OOP improvements
+ - Implemented Abstraction via interface
+ - Strong Classes & Objects
+ - Clean Encapsulation

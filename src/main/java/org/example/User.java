@@ -3,6 +3,7 @@ package org.example;
 import java.util.ArrayList;
 
 public class User {
+
     private int userId;
     private String name;
     private ArrayList<Book> borrowedBooks;
@@ -22,7 +23,9 @@ public class User {
     }
 
     public void borrowBook(Book book) {
-        borrowedBooks.add(book);
+        if (!borrowedBooks.contains(book)) {
+            borrowedBooks.add(book);
+        }
     }
 
     public void returnBook(Book book) {
