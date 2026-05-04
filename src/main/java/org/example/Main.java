@@ -109,8 +109,7 @@ public class Main {
                             break;
                         }
 
-                        library.addBook(new Book(title, author));
-                        break;
+                        library.addBook(new Book(title, author), currentUser);                        break;
 
                     case 2:
                         library.displayBooks();

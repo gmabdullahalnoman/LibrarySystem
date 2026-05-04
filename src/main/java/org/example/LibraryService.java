@@ -11,7 +11,14 @@ public class LibraryService implements LibraryOperations {
     }
 
     @Override
-    public void addBook(Book book) {
+    public void addBook(Book book, User user) {
+
+        // 🔒 RBAC check
+        if (!(user instanceof AdminUser)) {
+            System.out.println("Access denied. Only Admin can add books.");
+            return;
+        }
+
         books.add(book);
         System.out.println("Book added successfully.");
     }
@@ -50,12 +57,15 @@ public class LibraryService implements LibraryOperations {
             System.out.println("Book is already borrowed.");
             return;
         }
+
         int before = user.getBorrowedCount();
         user.borrowBook(book);
         int after = user.getBorrowedCount();
+
         if (before == after) {
             return;
         }
+
         book.borrowBook();
         System.out.println("Book borrowed successfully.");
     }
@@ -69,7 +79,6 @@ public class LibraryService implements LibraryOperations {
             return;
         }
 
-        // check if user actually borrowed it
         if (!userHasBook(user, book)) {
             System.out.println("You didn't borrow this book.");
             return;
@@ -81,20 +90,18 @@ public class LibraryService implements LibraryOperations {
         System.out.println("Book returned successfully.");
     }
 
-    // helper method
     private boolean userHasBook(User user, Book book) {
         return user.getBorrowedCount() > 0 &&
                 userHasSpecificBook(user, book);
     }
 
-    // clean check
     private boolean userHasSpecificBook(User user, Book book) {
-        // simple approach: loop (since list is private)
         for (Book b : userBorrowedList(user)) {
             if (b.getId() == book.getId()) return true;
         }
         return false;
     }
+
     private java.util.List<Book> userBorrowedList(User user) {
         try {
             java.lang.reflect.Field field = User.class.getDeclaredField("borrowedBooks");

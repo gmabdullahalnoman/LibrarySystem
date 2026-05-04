@@ -83,5 +83,11 @@
 
 ## Next Target:
 ### Role-Based Access Control (RBAC)
+ - Only Admin can add books 
+ - Enforced at service layer
+      - Polymorphism → instanceof AdminUser
+      - Abstraction → interface updated
+      - Encapsulation → control access via service
+      - Separation of Concerns → UI ≠ Business logic
 ### User-specific Functionalities
 ### Book Stock System
