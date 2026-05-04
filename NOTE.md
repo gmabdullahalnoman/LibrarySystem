@@ -64,3 +64,19 @@
  - Reliability - Program no longer breaks on bad input 
  - Robust Design - System can handle real user behavior 
  - Professional Practice - Proper use of try-catch-finally
+
+## Improved so far:
+
+### Encapsulation & Static
+ - Data Integrity - Book ID
+ - Auto-increment ID (static counter)
+ - Prevent duplicate IDs
+### Business Rule Enforcement
+ - Correct Business Logic (Borrow Flow)
+ - Fixed wrong order (user limit before marking book borrowed)
+### Method overriding (Runtime polymorphism)
+ - Polymorphism (User Types)
+ - Student / Premium / Admin wise limits
+### Collection (ArrayList); Separation of concerns ;Basic authentication flow
+ - System Design Upgrade (Multi-user)
+ - Added: Registration, Login by ID, Multiple users in memory
