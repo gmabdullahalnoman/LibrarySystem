@@ -50,10 +50,13 @@ public class LibraryService implements LibraryOperations {
             System.out.println("Book is already borrowed.");
             return;
         }
-
-        book.borrowBook();
+        int before = user.getBorrowedCount();
         user.borrowBook(book);
-
+        int after = user.getBorrowedCount();
+        if (before == after) {
+            return;
+        }
+        book.borrowBook();
         System.out.println("Book borrowed successfully.");
     }
 
