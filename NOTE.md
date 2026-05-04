@@ -80,3 +80,8 @@
 ### Collection (ArrayList); Separation of concerns ;Basic authentication flow
  - System Design Upgrade (Multi-user)
  - Added: Registration, Login by ID, Multiple users in memory
+
+## Next Target:
+### Role-Based Access Control (RBAC)
+### User-specific Functionalities
+### Book Stock System
