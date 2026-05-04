@@ -69,9 +69,39 @@ public class LibraryService implements LibraryOperations {
             return;
         }
 
+        // check if user actually borrowed it
+        if (!userHasBook(user, book)) {
+            System.out.println("You didn't borrow this book.");
+            return;
+        }
+
         book.returnBook();
         user.returnBook(book);
 
         System.out.println("Book returned successfully.");
+    }
+
+    // helper method
+    private boolean userHasBook(User user, Book book) {
+        return user.getBorrowedCount() > 0 &&
+                userHasSpecificBook(user, book);
+    }
+
+    // clean check
+    private boolean userHasSpecificBook(User user, Book book) {
+        // simple approach: loop (since list is private)
+        for (Book b : userBorrowedList(user)) {
+            if (b.getId() == book.getId()) return true;
+        }
+        return false;
+    }
+    private java.util.List<Book> userBorrowedList(User user) {
+        try {
+            java.lang.reflect.Field field = User.class.getDeclaredField("borrowedBooks");
+            field.setAccessible(true);
+            return (java.util.List<Book>) field.get(user);
+        } catch (Exception e) {
+            return new java.util.ArrayList<>();
+        }
     }
 }
