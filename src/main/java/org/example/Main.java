@@ -50,6 +50,7 @@ public class Main {
 
                 try {
                     choice = sc.nextInt();
+                    sc.nextLine();
                 } catch (Exception e) {
                     System.out.println("Invalid input. Please enter a number.");
                     sc.nextLine();
@@ -59,10 +60,6 @@ public class Main {
                 switch (choice) {
 
                     case 1:
-                        System.out.print("Enter Book ID: ");
-                        int id = sc.nextInt();
-                        sc.nextLine();
-
                         System.out.print("Enter Title: ");
                         String title = sc.nextLine();
 
@@ -74,7 +71,7 @@ public class Main {
                             break;
                         }
 
-                        library.addBook(new Book(id, title, author));
+                        library.addBook(new Book(title, author));
                         break;
 
                     case 2:
