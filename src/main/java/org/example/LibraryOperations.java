@@ -5,4 +5,7 @@ public interface LibraryOperations {
     void displayBooks();
     void borrowBook(int id, User user);
     void returnBook(int id, User user);
+
+    void updateBook(int id, String title, String author, int quantity, User user);
+    void deleteBook(int id, User user);
 }

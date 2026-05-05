@@ -88,7 +88,7 @@ public class LibraryService implements LibraryOperations {
 
         // decrease stock only after success
         book.borrowBook();
-        System.out.println( book.getTitle() + "by " +book.getAuthor() + " borrowed successfully.");
+        System.out.println( book.getTitle() + " by " +book.getAuthor() + " borrowed successfully.");
     }
 
     @Override
@@ -108,31 +108,45 @@ public class LibraryService implements LibraryOperations {
         user.returnBook(book);
         book.returnBook();
 
-        System.out.println(book.getTitle() + "by " +book.getAuthor() + " returned successfully.");
+        System.out.println(book.getTitle() + " by " +book.getAuthor() + " returned successfully.");
     }
+    @Override
+    public void updateBook(int id, String title, String author, int quantity, User user) {
 
-    /*
-    *# Old methods - Safe to delete
-    private boolean userHasBook(User user, Book book) {
-        return user.getBorrowedCount() > 0 &&
-                userHasSpecificBook(user, book);
-    }
-
-    private boolean userHasSpecificBook(User user, Book book) {
-        for (Book b : userBorrowedList(user)) {
-            if (b.getId() == book.getId()) return true;
+        if (!(user instanceof AdminUser)) {
+            System.out.println("Access denied. Only Admin can update books.");
+            return;
         }
-        return false;
-    }
 
-    private java.util.List<Book> userBorrowedList(User user) {
-        try {
-            java.lang.reflect.Field field = User.class.getDeclaredField("borrowedBooks");
-            field.setAccessible(true);
-            return (java.util.List<Book>) field.get(user);
-        } catch (Exception e) {
-            return new java.util.ArrayList<>();
+        Book book = findBookById(id);
+
+        if (book == null) {
+            System.out.println("Book not found.");
+            return;
         }
+
+        if (!title.isEmpty()) book.setTitle(title);
+        if (!author.isEmpty()) book.setAuthor(author);
+        if (quantity >= 0) book.setQuantity(quantity);
+
+        System.out.println("Book updated successfully.");
     }
-     */
+    @Override
+    public void deleteBook(int id, User user) {
+
+        if (!(user instanceof AdminUser)) {
+            System.out.println("Access denied. Only Admin can delete books.");
+            return;
+        }
+
+        Book book = findBookById(id);
+
+        if (book == null) {
+            System.out.println("Book not found.");
+            return;
+        }
+
+        books.remove(book);
+        System.out.println("Book deleted successfully.");
+    }
 }

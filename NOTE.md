@@ -114,4 +114,6 @@
  - Merge stock instead of new entry
  - Proper feedback for duplicate borrow
  - Removed stock visibility from user view
-# Will raise new demand soon..
+### CRUD operations, Encapsulation (setters), RBAC enforcement
+ - Admin can Update/Delete Books
+# Will raise new demand soon...

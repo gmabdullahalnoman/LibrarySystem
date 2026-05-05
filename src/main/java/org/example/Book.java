@@ -32,6 +32,18 @@ public class Book {
         return quantity;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public boolean isAvailable() {
         return quantity > 0; // derived
     }

@@ -95,7 +95,9 @@ public class Main {
                 if (currentUser instanceof AdminUser) {
                     System.out.println("1. Add Book");
                     System.out.println("2. Display Books");
-                    System.out.println("3. Logout");
+                    System.out.println("3. Update Book");
+                    System.out.println("4. Delete Book");
+                    System.out.println("5. Logout");
                     System.out.println("0. Exit");
                 } else {
                     System.out.println("1. Display Books");
@@ -142,6 +144,31 @@ public class Main {
                             break;
 
                         case 3:
+                            System.out.print("Enter Book ID: ");
+                            int upId = safeIntInput(sc);
+                            if (upId == -1) break;
+
+                            System.out.print("New Title (enter to skip): ");
+                            String newTitle = sc.nextLine();
+
+                            System.out.print("New Author (enter to skip): ");
+                            String newAuthor = sc.nextLine();
+
+                            System.out.print("New Quantity (-1 to skip): ");
+                            int newQty = safeIntInput(sc);
+
+                            library.updateBook(upId, newTitle, newAuthor, newQty, currentUser);
+                            break;
+
+                        case 4:
+                            System.out.print("Enter Book ID: ");
+                            int delId = safeIntInput(sc);
+                            if (delId == -1) break;
+
+                            library.deleteBook(delId, currentUser);
+                            break;
+
+                        case 5:
                             currentUser = null;
                             System.out.println("Logged out.");
                             break;
