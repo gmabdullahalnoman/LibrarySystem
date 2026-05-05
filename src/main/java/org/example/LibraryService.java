@@ -88,7 +88,7 @@ public class LibraryService implements LibraryOperations {
 
         // decrease stock only after success
         book.borrowBook();
-        System.out.println("Book borrowed successfully.");
+        System.out.println( book.getTitle() + "by " +book.getAuthor() + " borrowed successfully.");
     }
 
     @Override
@@ -108,7 +108,7 @@ public class LibraryService implements LibraryOperations {
         user.returnBook(book);
         book.returnBook();
 
-        System.out.println("Book returned successfully.");
+        System.out.println(book.getTitle() + "by " +book.getAuthor() + " returned successfully.");
     }
 
     /*

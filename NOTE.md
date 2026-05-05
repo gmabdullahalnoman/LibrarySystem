@@ -112,4 +112,6 @@
  - Correct stock update flow
 
  - Merge stock instead of new entry
+ - Proper feedback for duplicate borrow
+ - Removed stock visibility from user view
 # Will raise new demand soon..

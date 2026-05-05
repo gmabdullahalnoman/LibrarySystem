@@ -12,9 +12,11 @@ public class User extends Person {
     }
 
     public void borrowBook(Book book) {
-        if (!borrowedBooks.contains(book)) {
-            borrowedBooks.add(book);
+        if (borrowedBooks.contains(book)) {
+            System.out.println("You already borrowed this book.");
+            return;
         }
+        borrowedBooks.add(book);
     }
 
     public void returnBook(Book book) {
@@ -28,7 +30,11 @@ public class User extends Person {
         }
 
         for (Book book : borrowedBooks) {
-            System.out.println(book);
+            System.out.println(
+                    book.getId() + " | " +
+                            book.getTitle() + " by " +
+                            book.getAuthor()
+            );
         }
     }
     public int getBorrowedCount() {
