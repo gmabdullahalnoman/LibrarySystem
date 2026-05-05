@@ -2,34 +2,33 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
 public class Main {
 
     private static int userIdCounter = 1;
-    public static void main(String[] args) {
+
+    static void main() {
 
         LibraryOperations library = new LibraryService();
         ArrayList<User> users = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
+
         try {
             User currentUser = null;
+
             while (true) {
-                // LOGIN & REGISTER MENU
+
+                // AUTH MENU
                 if (currentUser == null) {
                     System.out.println("\n===== Welcome =====");
                     System.out.println("1. Register");
                     System.out.println("2. Login");
                     System.out.println("0. Exit");
                     System.out.print("Choice: ");
-                    int authChoice;
 
-                    try {
-                        authChoice = sc.nextInt();
-                        sc.nextLine();
-                    } catch (Exception e) {
-                        System.out.println("Invalid input. Please enter a number from menu.");
-                        sc.nextLine(); // clear buffer
-                        continue; // go back to menu
-                    }
+                    int authChoice = safeIntInput(sc);
+                    if (authChoice == -1) continue;
+
                     switch (authChoice) {
                         case 1:
                             System.out.println("Select User Type:");
@@ -37,19 +36,17 @@ public class Main {
                             System.out.println("2. Premium");
                             System.out.println("3. Admin");
                             System.out.print("Choice: ");
-                            int type;
 
-                            try {
-                                type = sc.nextInt();
-                                sc.nextLine();
-                            } catch (Exception e) {
-                                System.out.println("Invalid input. Please enter a valid number.");
-                                sc.nextLine();
-                                continue;
-                            }
+                            int type = safeIntInput(sc);
+                            if (type == -1) continue;
 
                             System.out.print("Enter Name: ");
                             String name = sc.nextLine();
+
+                            if (name.isEmpty()) {
+                                System.out.println("Name cannot be empty.");
+                                continue;
+                            }
 
                             User newUser;
 
@@ -68,20 +65,22 @@ public class Main {
                                     continue;
                             }
                             users.add(newUser);
-                            System.out.println("Registered successfully. Your ID: " + newUser.getId());
+                            System.out.println("Registered. Your ID: " + newUser.getId());
                             break;
                         case 2:
                             System.out.print("Enter User ID: ");
-                            int loginId = sc.nextInt();
+                            int loginId = safeIntInput(sc);
+                            if (loginId == -1) continue;
+
                             currentUser = findUserById(users, loginId);
                             if (currentUser == null) {
                                 System.out.println("User not found.");
                             } else {
-                                System.out.println("Login successful. Welcome " + currentUser.getName());
+                                System.out.println("Welcome " + currentUser.getName());
                             }
                             break;
                         case 0:
-                            System.out.println("Exiting system...");
+                            System.out.println("Exiting...");
                             return;
 
                         default:
@@ -89,8 +88,10 @@ public class Main {
                     }
                     continue;
                 }
+
                 // LIBRARY MENU
                 System.out.println("\n===== Library Menu =====");
+
                 if (currentUser instanceof AdminUser) {
                     System.out.println("1. Add Book");
                     System.out.println("2. Display Books");
@@ -104,20 +105,13 @@ public class Main {
                     System.out.println("5. Logout");
                     System.out.println("0. Exit");
                 }
+
                 System.out.print("Choose: ");
-
-                int choice;
-
-                try {
-                    choice = sc.nextInt();
-                    sc.nextLine();
-                } catch (Exception e) {
-                    System.out.println("Invalid input.");
-                    sc.nextLine();
-                    continue;
-                }
+                int choice = safeIntInput(sc);
+                if (choice == -1) continue;
 
                 if (currentUser instanceof AdminUser) {
+
                     switch (choice) {
                         case 1:
                             System.out.print("Enter Title: ");
@@ -132,13 +126,16 @@ public class Main {
                             }
 
                             System.out.print("Enter Quantity: ");
-                            int qty = sc.nextInt();
-                            sc.nextLine();
+                            int qty = safeIntInput(sc);
+                            if (qty == -1) break;
+
                             if (qty <= 0) {
                                 System.out.println("Quantity must be positive.");
                                 break;
                             }
+
                             library.addBook(new Book(title, author, qty), currentUser);
+                            break;
 
                         case 2:
                             library.displayBooks();
@@ -148,9 +145,11 @@ public class Main {
                             currentUser = null;
                             System.out.println("Logged out.");
                             break;
+
                         case 0:
-                            System.out.println("Exiting system...");
+                            System.out.println("Exiting...");
                             return;
+
                         default:
                             System.out.println("Invalid choice.");
                     }
@@ -162,13 +161,17 @@ public class Main {
 
                         case 2:
                             System.out.print("Enter Book ID: ");
-                            int borrowId = sc.nextInt();
+                            int borrowId = safeIntInput(sc);
+                            if (borrowId == -1) break;
+
                             library.borrowBook(borrowId, currentUser);
                             break;
 
                         case 3:
                             System.out.print("Enter Book ID: ");
-                            int returnId = sc.nextInt();
+                            int returnId = safeIntInput(sc);
+                            if (returnId == -1) break;
+
                             library.returnBook(returnId, currentUser);
                             break;
 
@@ -182,7 +185,7 @@ public class Main {
                             break;
 
                         case 0:
-                            System.out.println("Exiting system...");
+                            System.out.println("Exiting...");
                             return;
 
                         default:
@@ -195,6 +198,20 @@ public class Main {
             sc.close();
         }
     }
+
+    // reusable safe input
+    private static int safeIntInput(Scanner sc) {
+        try {
+            int val = sc.nextInt();
+            sc.nextLine();
+            return val;
+        } catch (Exception e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            sc.nextLine();
+            return -1;
+        }
+    }
+
     private static User findUserById(ArrayList<User> users, int id) {
         for (User user : users) {
             if (user.getId() == id) return user;

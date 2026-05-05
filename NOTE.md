@@ -99,3 +99,8 @@
  - Replaced boolean → quantity-based stock 
  - Dynamic availability (quantity > 0)
  - Borrow/Return updates stock
+
+### Reusable method, Exception handling, Defensive programming
+ - Global safe input handler (safeIntInput)
+ - No crash on wrong input 
+ - Polite messages everywhere
