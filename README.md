@@ -13,7 +13,7 @@ User → Represents a library user who can borrow and return books
 Library → Manages the collection of books and handles operations such as adding, borrowing,
 and returning.
 
-## OOP Concepts Implemented (Current Stage)
+## OOP Concepts Implemented
 ### Classes and Objects
 The system is structured using multiple classes representing real-world entities
 Objects are created from these classes to perform operations
@@ -26,11 +26,11 @@ Ensures data security and controlled modification
 
 This project will be extended step by step to implement all OOP pillars:
 
-Step 1: Classes and Objects (Completed)
-Step 2: Encapsulation (Completed)
-Step 3: Inheritance (Pending)
-Step 4: Polymorphism (Pending)
-Step 5: Abstraction (Pending)
+Step 1: Classes and Objects 
+Step 2: Encapsulation 
+Step 3: Inheritance 
+Step 4: Polymorphism 
+Step 5: Abstraction 
 
 Each concept will be introduced InshaAllah.
 

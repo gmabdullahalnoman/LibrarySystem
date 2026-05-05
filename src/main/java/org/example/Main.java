@@ -13,15 +13,23 @@ public class Main {
         try {
             User currentUser = null;
             while (true) {
-                // LOGIN / REGISTER MENU
+                // LOGIN & REGISTER MENU
                 if (currentUser == null) {
                     System.out.println("\n===== Welcome =====");
                     System.out.println("1. Register");
                     System.out.println("2. Login");
                     System.out.println("0. Exit");
                     System.out.print("Choice: ");
-                    int authChoice = sc.nextInt();
-                    sc.nextLine();
+                    int authChoice;
+
+                    try {
+                        authChoice = sc.nextInt();
+                        sc.nextLine();
+                    } catch (Exception e) {
+                        System.out.println("Invalid input. Please enter a number from menu.");
+                        sc.nextLine(); // clear buffer
+                        continue; // go back to menu
+                    }
                     switch (authChoice) {
                         case 1:
                             System.out.println("Select User Type:");
@@ -29,8 +37,16 @@ public class Main {
                             System.out.println("2. Premium");
                             System.out.println("3. Admin");
                             System.out.print("Choice: ");
-                            int type = sc.nextInt();
-                            sc.nextLine();
+                            int type;
+
+                            try {
+                                type = sc.nextInt();
+                                sc.nextLine();
+                            } catch (Exception e) {
+                                System.out.println("Invalid input. Please enter a valid number.");
+                                sc.nextLine();
+                                continue;
+                            }
 
                             System.out.print("Enter Name: ");
                             String name = sc.nextLine();
@@ -75,13 +91,19 @@ public class Main {
                 }
                 // LIBRARY MENU
                 System.out.println("\n===== Library Menu =====");
-                System.out.println("1. Add Book");
-                System.out.println("2. Display Books");
-                System.out.println("3. Borrow Book");
-                System.out.println("4. Return Book");
-                System.out.println("5. View My Books");
-                System.out.println("6. Logout");
-                System.out.println("0. Exit");
+                if (currentUser instanceof AdminUser) {
+                    System.out.println("1. Add Book");
+                    System.out.println("2. Display Books");
+                    System.out.println("3. Logout");
+                    System.out.println("0. Exit");
+                } else {
+                    System.out.println("1. Display Books");
+                    System.out.println("2. Borrow Book");
+                    System.out.println("3. Return Book");
+                    System.out.println("4. View My Books");
+                    System.out.println("5. Logout");
+                    System.out.println("0. Exit");
+                }
                 System.out.print("Choose: ");
 
                 int choice;
@@ -95,53 +117,71 @@ public class Main {
                     continue;
                 }
 
-                switch (choice) {
+                if (currentUser instanceof AdminUser) {
+                    switch (choice) {
+                        case 1:
+                            System.out.print("Enter Title: ");
+                            String title = sc.nextLine();
 
-                    case 1:
-                        System.out.print("Enter Title: ");
-                        String title = sc.nextLine();
+                            System.out.print("Enter Author: ");
+                            String author = sc.nextLine();
 
-                        System.out.print("Enter Author: ");
-                        String author = sc.nextLine();
+                            if (title.isEmpty() || author.isEmpty()) {
+                                System.out.println("Title/Author cannot be empty.");
+                                break;
+                            }
 
-                        if (title.isEmpty() || author.isEmpty()) {
-                            System.out.println("Title/Author cannot be empty.");
+                            library.addBook(new Book(title, author), currentUser);
                             break;
-                        }
 
-                        library.addBook(new Book(title, author), currentUser);                        break;
+                        case 2:
+                            library.displayBooks();
+                            break;
 
-                    case 2:
-                        library.displayBooks();
-                        break;
+                        case 3:
+                            currentUser = null;
+                            System.out.println("Logged out.");
+                            break;
+                        case 0:
+                            System.out.println("Exiting system...");
+                            return;
+                        default:
+                            System.out.println("Invalid choice.");
+                    }
+                } else {
+                    switch (choice) {
+                        case 1:
+                            library.displayBooks();
+                            break;
 
-                    case 3:
-                        System.out.print("Enter Book ID: ");
-                        int borrowId = sc.nextInt();
-                        library.borrowBook(borrowId, currentUser);
-                        break;
+                        case 2:
+                            System.out.print("Enter Book ID: ");
+                            int borrowId = sc.nextInt();
+                            library.borrowBook(borrowId, currentUser);
+                            break;
 
-                    case 4:
-                        System.out.print("Enter Book ID: ");
-                        int returnId = sc.nextInt();
-                        library.returnBook(returnId, currentUser);
-                        break;
+                        case 3:
+                            System.out.print("Enter Book ID: ");
+                            int returnId = sc.nextInt();
+                            library.returnBook(returnId, currentUser);
+                            break;
 
-                    case 5:
-                        currentUser.showBorrowedBooks();
-                        break;
+                        case 4:
+                            currentUser.showBorrowedBooks();
+                            break;
 
-                    case 6:
-                        currentUser = null;
-                        System.out.println("Logged out.");
-                        break;
+                        case 5:
+                            currentUser = null;
+                            System.out.println("Logged out.");
+                            break;
 
-                    case 0:
-                        System.out.println("Exiting system...");
-                        return;
+                        case 0:
+                            System.out.println("Exiting system...");
+                            return;
 
-                    default:
-                        System.out.println("Invalid choice.");
+                        default:
+                            System.out.println("Invalid choice.");
+                    }
                 }
             }
 

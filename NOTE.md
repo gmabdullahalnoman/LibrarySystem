@@ -90,4 +90,9 @@
       - Encapsulation → control access via service
       - Separation of Concerns → UI ≠ Business logic
 ### User-specific Functionalities
+ - Polymorphism (instanceof)
+ - Access Control (UI + Service layer)
+ - Clean UX design (role-based flow)
+      - Admin → management
+      - Users → usage
 ### Book Stock System
