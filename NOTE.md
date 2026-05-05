@@ -111,4 +111,5 @@
  - Prevent borrow when stock = 0 
  - Correct stock update flow
 
+ - Merge stock instead of new entry
 # Will raise new demand soon..

@@ -11,15 +11,33 @@ public class LibraryService implements LibraryOperations {
     }
 
     @Override
-    public void addBook(Book book, User user) {
+    public void addBook(Book newBook, User user) {
 
-        // 🔒 RBAC check
+        // RBAC check
         if (!(user instanceof AdminUser)) {
             System.out.println("Access denied. Only Admin can add books.");
             return;
         }
 
-        books.add(book);
+        // check duplicate (title + author)
+        for (Book book : books) {
+            if (book.getTitle().equalsIgnoreCase(newBook.getTitle()) &&
+                    book.getAuthor().equalsIgnoreCase(newBook.getAuthor())) {
+
+                // merge stock
+                int updatedQty = book.getQuantity() + newBook.getQuantity();
+                // need setter OR loop increment
+                for (int i = 0; i < newBook.getQuantity(); i++) {
+                    book.returnBook(); // reuse method to increase
+                }
+
+                System.out.println("Book already exists. Stock updated to: " + book.getQuantity());
+                return;
+            }
+        }
+
+        // new book
+        books.add(newBook);
         System.out.println("Book added successfully.");
     }
 

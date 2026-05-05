@@ -18,11 +18,11 @@ public class Main {
 
             while (true) {
 
-                // AUTH MENU
+                // Register & Login Menu
                 if (currentUser == null) {
                     System.out.println("\n===== Welcome =====");
-                    System.out.println("1. Register");
-                    System.out.println("2. Login");
+                    System.out.println("1. Sign-Up (Register New)");
+                    System.out.println("2. Login (Existing Account)");
                     System.out.println("0. Exit");
                     System.out.print("Choice: ");
 
@@ -40,11 +40,11 @@ public class Main {
                             int type = safeIntInput(sc);
                             if (type == -1) continue;
 
-                            System.out.print("Enter Name: ");
+                            System.out.print("Enter User Name: ");
                             String name = sc.nextLine();
 
                             if (name.isEmpty()) {
-                                System.out.println("Name cannot be empty.");
+                                System.out.println("User Name cannot be empty.");
                                 continue;
                             }
 
@@ -76,7 +76,7 @@ public class Main {
                             if (currentUser == null) {
                                 System.out.println("User not found.");
                             } else {
-                                System.out.println("Welcome " + currentUser.getName());
+                                System.out.println("Welcome " + currentUser.getName() +" to the Library.");
                             }
                             break;
                         case 0:
