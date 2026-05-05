@@ -81,7 +81,7 @@
  - System Design Upgrade (Multi-user)
  - Added: Registration, Login by ID, Multiple users in memory
 
-## Next Target:
+## Target Completed
 ### Role-Based Access Control (RBAC)
  - Only Admin can add books 
  - Enforced at service layer
@@ -102,5 +102,13 @@
 
 ### Reusable method, Exception handling, Defensive programming
  - Global safe input handler (safeIntInput)
+ - Handles bad input everywhere
  - No crash on wrong input 
  - Polite messages everywhere
+
+### State consistency, Rule validation
+ - Borrow checks stock instead of availability 
+ - Prevent borrow when stock = 0 
+ - Correct stock update flow
+
+# Will raise new demand soon..

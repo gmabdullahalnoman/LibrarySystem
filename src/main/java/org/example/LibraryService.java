@@ -53,8 +53,9 @@ public class LibraryService implements LibraryOperations {
             return;
         }
 
-        if (!book.isAvailable()) {
-            System.out.println("Book is already borrowed.");
+        // stock check instead of boolean
+        if (book.getQuantity() <= 0) {
+            System.out.println("Book out of stock.");
             return;
         }
 
@@ -62,10 +63,12 @@ public class LibraryService implements LibraryOperations {
         user.borrowBook(book);
         int after = user.getBorrowedCount();
 
+        // limit reached
         if (before == after) {
             return;
         }
 
+        // decrease stock only after success
         book.borrowBook();
         System.out.println("Book borrowed successfully.");
     }
@@ -79,17 +82,19 @@ public class LibraryService implements LibraryOperations {
             return;
         }
 
-        if (!userHasBook(user, book)) {
+        if (!user.hasBorrowedBook(book)) {
             System.out.println("You didn't borrow this book.");
             return;
         }
 
-        book.returnBook();
         user.returnBook(book);
+        book.returnBook();
 
         System.out.println("Book returned successfully.");
     }
 
+    /*
+    *# Old methods - Safe to delete
     private boolean userHasBook(User user, Book book) {
         return user.getBorrowedCount() > 0 &&
                 userHasSpecificBook(user, book);
@@ -111,4 +116,5 @@ public class LibraryService implements LibraryOperations {
             return new java.util.ArrayList<>();
         }
     }
+     */
 }

@@ -34,4 +34,10 @@ public class User extends Person {
     public int getBorrowedCount() {
         return borrowedBooks.size();
     }
+    public boolean hasBorrowedBook(Book book) {
+        for (Book b : borrowedBooks) {
+            if (b.getId() == book.getId()) return true;
+        }
+        return false;
+    }
 }
