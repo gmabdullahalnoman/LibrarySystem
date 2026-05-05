@@ -96,3 +96,6 @@
       - Admin → management
       - Users → usage
 ### Book Stock System
+ - Replaced boolean → quantity-based stock 
+ - Dynamic availability (quantity > 0)
+ - Borrow/Return updates stock

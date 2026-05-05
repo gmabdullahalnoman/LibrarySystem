@@ -7,13 +7,13 @@ public class Book {
     private int id;
     private String title;
     private String author;
-    private boolean isAvailable;
+    private int quantity; // stock
 
-    public Book(String title, String author) {
+    public Book(String title, String author, int quantity) {
         this.id = idCounter++;
         this.title = title;
         this.author = author;
-        this.isAvailable = true;
+        this.quantity = quantity;
     }
 
     public int getId() {
@@ -28,21 +28,26 @@ public class Book {
         return author;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
     public boolean isAvailable() {
-        return isAvailable;
+        return quantity > 0; // derived
     }
 
     public void borrowBook() {
-        isAvailable = false;
+        if (quantity > 0) {
+            quantity--; // decrease stock
+        }
     }
 
     public void returnBook() {
-        isAvailable = true;
+        quantity++; // increase stock
     }
 
     @Override
     public String toString() {
-        return id + " | " + title + " by " + author + " | " +
-                (isAvailable ? "Available" : "Borrowed");
+        return id + " | " + title + " by " + author + " | Stock: " + quantity;
     }
 }

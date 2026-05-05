@@ -131,8 +131,14 @@ public class Main {
                                 break;
                             }
 
-                            library.addBook(new Book(title, author), currentUser);
-                            break;
+                            System.out.print("Enter Quantity: ");
+                            int qty = sc.nextInt();
+                            sc.nextLine();
+                            if (qty <= 0) {
+                                System.out.println("Quantity must be positive.");
+                                break;
+                            }
+                            library.addBook(new Book(title, author, qty), currentUser);
 
                         case 2:
                             library.displayBooks();
