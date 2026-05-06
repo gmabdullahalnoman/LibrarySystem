@@ -116,4 +116,5 @@
  - Removed stock visibility from user view
 ### CRUD operations, Encapsulation (setters), RBAC enforcement
  - Admin can Update/Delete Books
-# Will raise new demand soon...
+
+# Will raise new demand soon...(Check Plan.md)
