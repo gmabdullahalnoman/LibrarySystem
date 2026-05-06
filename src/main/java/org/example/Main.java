@@ -7,7 +7,7 @@ public class Main {
 
     private static int userIdCounter = 1;
 
-    public static void main(String[] args) {
+    static void main() {
 
         LibraryService library = new LibraryService();
         ArrayList<User> users = new ArrayList<>();
@@ -20,6 +20,7 @@ public class Main {
 
                 // AUTH MENU
                 if (currentUser == null) {
+                    System.out.println("to solve - admin can still approve without student sends approve request");
                     System.out.println("\n===== Welcome =====");
                     System.out.println("1. Register");
                     System.out.println("2. Login");
@@ -90,16 +91,16 @@ public class Main {
                     System.out.println("2. Display Books");
                     System.out.println("3. Update Book");
                     System.out.println("4. Delete Book");
-                    System.out.println("5. Approve User");
-                    System.out.println("6. Reject User");
-                    System.out.println("7. Approve Premium");
-                    System.out.println("8. Block User");
-                    System.out.println("9. Unblock User");
-                    System.out.println("10. Update User Limit");
-                    System.out.println("11. Delete User");
-                    System.out.println("12. Logout");
+                    System.out.println("5. View All Users");
+                    System.out.println("6. Approve User");
+                    System.out.println("7. Reject User");
+                    System.out.println("8. Approve Premium");
+                    System.out.println("9. Block User");
+                    System.out.println("10. Unblock User");
+                    System.out.println("11. Update User Limit");
+                    System.out.println("12. Delete User");
+                    System.out.println("13. Logout");
                     System.out.println("0. Exit");
-                    System.out.print("Choice: ");
 
                     int choice = safeIntInput(sc);
                     if (choice == -1) continue;
@@ -129,8 +130,10 @@ public class Main {
 
                             System.out.print("New Title: ");
                             String nt = sc.nextLine();
+
                             System.out.print("New Author: ");
                             String na = sc.nextLine();
+
                             System.out.print("New Qty: ");
                             int nq = safeIntInput(sc);
 
@@ -138,36 +141,43 @@ public class Main {
                             break;
 
                         case 4:
-                            System.out.print("Book ID: ");
-                            library.deleteBook(safeIntInput(sc), currentUser);
+                            System.out.print("Enter Book ID: ");
+                            int delId = safeIntInput(sc);
+                            if (delId == -1) break;
+
+                            library.deleteBook(delId, currentUser, users);
                             break;
 
-                        case 5:
-                            System.out.print("User ID: ");
-                            library.approveUser(safeIntInput(sc), users, currentUser);
+                        case 5: // NEW
+                            library.displayUsers(users);
                             break;
 
                         case 6:
                             System.out.print("User ID: ");
-                            library.rejectUser(safeIntInput(sc), users, currentUser);
+                            library.approveUser(safeIntInput(sc), users, currentUser);
                             break;
 
                         case 7:
                             System.out.print("User ID: ");
-                            library.approvePremium(safeIntInput(sc), users, currentUser);
+                            library.rejectUser(safeIntInput(sc), users, currentUser);
                             break;
 
                         case 8:
                             System.out.print("User ID: ");
-                            library.setUserBlock(safeIntInput(sc), true, users, currentUser);
+                            library.approvePremium(safeIntInput(sc), users, currentUser);
                             break;
 
                         case 9:
                             System.out.print("User ID: ");
-                            library.setUserBlock(safeIntInput(sc), false, users, currentUser);
+                            library.setUserBlock(safeIntInput(sc), true, users, currentUser);
                             break;
 
                         case 10:
+                            System.out.print("User ID: ");
+                            library.setUserBlock(safeIntInput(sc), false, users, currentUser);
+                            break;
+
+                        case 11:
                             System.out.print("User ID: ");
                             int uid = safeIntInput(sc);
                             System.out.print("New Limit: ");
@@ -175,12 +185,12 @@ public class Main {
                             library.updateUserLimit(uid, lim, users, currentUser);
                             break;
 
-                        case 11:
+                        case 12:
                             System.out.print("User ID: ");
                             library.deleteUser(safeIntInput(sc), users, currentUser);
                             break;
 
-                        case 12:
+                        case 13:
                             currentUser = null;
                             break;
 
@@ -189,6 +199,53 @@ public class Main {
                     }
 
                 } else {
+
+                    // If NOT active → restricted menu
+                    if (currentUser.getStatus() != User.Status.ACTIVE) {
+
+                        System.out.println("\n===== Account Pending =====");
+                        System.out.println("Status: " + currentUser.getStatus());
+
+                        if (currentUser.getStatus() == User.Status.PENDING) {
+                            System.out.println(">> Your account is waiting for admin approval.");
+                            System.out.println("1. Request Activation");
+                        }
+
+                        System.out.println("2. View My Status");
+                        System.out.println("3. Logout");
+                        System.out.println("0. Exit");
+                        System.out.print("Choice: ");
+
+                        int choice = safeIntInput(sc);
+                        if (choice == -1) continue;
+
+                        switch (choice) {
+
+                            case 1:
+                                if (currentUser.getStatus() == User.Status.PENDING) {
+                                    currentUser.requestActivation();
+                                } else {
+                                    System.out.println("Invalid choice.");
+                                }
+                                break;
+
+                            case 2:
+                                currentUser.showBorrowedBooks();
+                                break;
+
+                            case 3:
+                                currentUser = null;
+                                break;
+
+                            case 0:
+                                return;
+
+                            default:
+                                System.out.println("Invalid choice.");
+                        }
+
+                        continue;
+                    }
                     // USER MENU
                     System.out.println("\n===== User Menu =====");
                     System.out.println("1. Display Books");

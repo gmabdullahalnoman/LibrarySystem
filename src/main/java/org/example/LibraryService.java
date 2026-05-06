@@ -9,6 +9,7 @@ public class LibraryService implements LibraryOperations {
     public LibraryService() {
         this.books = new ArrayList<>();
     }
+
     private User findUserById(ArrayList<User> users, int id) {
         for (User user : users) {
             if (user.getId() == id) return user;
@@ -16,56 +17,47 @@ public class LibraryService implements LibraryOperations {
         return null;
     }
 
+    private Book findBookById(int id) {
+        for (Book book : books) {
+            if (book.getId() == id) return book;
+        }
+        return null;
+    }
+
     @Override
     public void addBook(Book newBook, User user) {
-
-        // RBAC check
         if (!(user instanceof AdminUser)) {
-            System.out.println("Access denied. Only Admin can add books.");
+            System.out.println("Access denied.");
             return;
         }
 
-        // check duplicate (title + author)
         for (Book book : books) {
             if (book.getTitle().equalsIgnoreCase(newBook.getTitle()) &&
                     book.getAuthor().equalsIgnoreCase(newBook.getAuthor())) {
 
-                // merge stock
-                int updatedQty = book.getQuantity() + newBook.getQuantity();
-                // need setter OR loop increment
                 for (int i = 0; i < newBook.getQuantity(); i++) {
-                    book.returnBook(); // reuse method to increase
+                    book.returnBook();
                 }
 
-                System.out.println("Book already exists. Stock updated to: " + book.getQuantity());
+                System.out.println("Stock updated: " + book.getQuantity());
                 return;
             }
         }
 
-        // new book
         books.add(newBook);
-        System.out.println("Book added successfully.");
+        System.out.println("Book added.");
     }
 
     @Override
     public void displayBooks() {
         if (books.isEmpty()) {
-            System.out.println("No books in library.");
+            System.out.println("No books.");
             return;
         }
 
         for (Book book : books) {
             System.out.println(book);
         }
-    }
-
-    private Book findBookById(int id) {
-        for (Book book : books) {
-            if (book.getId() == id) {
-                return book;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -77,9 +69,8 @@ public class LibraryService implements LibraryOperations {
             return;
         }
 
-        // stock check instead of boolean
         if (book.getQuantity() <= 0) {
-            System.out.println("Book out of stock.");
+            System.out.println("Out of stock.");
             return;
         }
 
@@ -87,14 +78,10 @@ public class LibraryService implements LibraryOperations {
         user.borrowBook(book);
         int after = user.getBorrowedCount();
 
-        // limit reached
-        if (before == after) {
-            return;
-        }
+        if (before == after) return;
 
-        // decrease stock only after success
         book.borrowBook();
-        System.out.println( book.getTitle() + " by " +book.getAuthor() + " borrowed successfully.");
+        System.out.println("Borrowed: " + book.getTitle());
     }
 
     @Override
@@ -107,20 +94,20 @@ public class LibraryService implements LibraryOperations {
         }
 
         if (!user.hasBorrowedBook(book)) {
-            System.out.println("You didn't borrow this book.");
+            System.out.println("Not your book.");
             return;
         }
 
         user.returnBook(book);
         book.returnBook();
 
-        System.out.println(book.getTitle() + " by " +book.getAuthor() + " returned successfully.");
+        System.out.println("Returned: " + book.getTitle());
     }
+
     @Override
     public void updateBook(int id, String title, String author, int quantity, User user) {
-
         if (!(user instanceof AdminUser)) {
-            System.out.println("Access denied. Only Admin can update books.");
+            System.out.println("Access denied.");
             return;
         }
 
@@ -135,13 +122,13 @@ public class LibraryService implements LibraryOperations {
         if (!author.isEmpty()) book.setAuthor(author);
         if (quantity >= 0) book.setQuantity(quantity);
 
-        System.out.println("Book updated successfully.");
+        System.out.println("Updated.");
     }
-    @Override
-    public void deleteBook(int id, User user) {
 
+    @Override
+    public void deleteBook(int id, User user, ArrayList<User> users) {
         if (!(user instanceof AdminUser)) {
-            System.out.println("Access denied. Only Admin can delete books.");
+            System.out.println("Access denied.");
             return;
         }
 
@@ -152,112 +139,111 @@ public class LibraryService implements LibraryOperations {
             return;
         }
 
+        if (book.getQuantity() > 0) {
+            System.out.println("Stock not zero.");
+            return;
+        }
+
+        for (User u : users) {
+            if (u.hasBorrowedBook(book)) {
+                System.out.println("Book is borrowed.");
+                return;
+            }
+        }
+
         books.remove(book);
-        System.out.println("Book deleted successfully.");
+        System.out.println("Book deleted.");
     }
+
+    @Override
     public void approveUser(int userId, ArrayList<User> users, User admin) {
+        if (!(admin instanceof AdminUser)) return;
 
-        if (!(admin instanceof AdminUser)) {
-            System.out.println("Access denied.");
-            return;
-        }
+        User u = findUserById(users, userId);
+        if (u == null) return;
 
-        User user = findUserById(users, userId);
-
-        if (user == null) {
-            System.out.println("User not found.");
-            return;
-        }
-
-        user.approve();
-        System.out.println("User approved successfully.");
+        u.approve();
+        System.out.println("User approved.");
     }
 
+    @Override
     public void rejectUser(int userId, ArrayList<User> users, User admin) {
+        if (!(admin instanceof AdminUser)) return;
 
-        if (!(admin instanceof AdminUser)) {
-            System.out.println("Access denied.");
-            return;
-        }
+        User u = findUserById(users, userId);
+        if (u == null) return;
 
-        User user = findUserById(users, userId);
-
-        if (user == null) {
-            System.out.println("User not found.");
-            return;
-        }
-
-        user.reject();
+        u.reject();
         System.out.println("User rejected.");
     }
-    public void approvePremium(int userId, ArrayList<User> users, User admin) {
-        if (!(admin instanceof AdminUser)) {
-            System.out.println("Access denied.");
-            return;
-        }
 
-        User user = findUserById(users, userId);
+    // EXTRA methods (not in interface)
+    public void approvePremium(int id, ArrayList<User> users, User admin) {
+        User u = findUserById(users, id);
+        if (u == null || !u.isPremiumRequested()) return;
 
-        if (user == null || !user.isPremiumRequested()) {
-            System.out.println("No request found.");
-            return;
-        }
-
-        user.setBorrowLimit(5);
-        user.clearPremiumRequest();
-
-        System.out.println("User upgraded to Premium.");
+        u.setBorrowLimit(5);
+        u.clearPremiumRequest();
+        System.out.println("Upgraded.");
     }
 
-    public void setUserBlock(int userId, boolean block, ArrayList<User> users, User admin) {
-        if (!(admin instanceof AdminUser)) {
-            System.out.println("Access denied.");
-            return;
-        }
+    public void setUserBlock(int id, boolean block, ArrayList<User> users, User admin) {
+        User u = findUserById(users, id);
+        if (u == null) return;
 
-        User user = findUserById(users, userId);
-
-        if (user == null) {
-            System.out.println("User not found.");
-            return;
-        }
-
-        user.setBlocked(block);
-        System.out.println(block ? "User blocked." : "User unblocked.");
+        u.setBlocked(block);
     }
 
-    public void updateUserLimit(int userId, int limit, ArrayList<User> users, User admin) {
-        if (!(admin instanceof AdminUser)) {
-            System.out.println("Access denied.");
-            return;
-        }
+    public void updateUserLimit(int id, int limit, ArrayList<User> users, User admin) {
+        User u = findUserById(users, id);
+        if (u == null) return;
 
-        User user = findUserById(users, userId);
-
-        if (user == null) {
-            System.out.println("User not found.");
-            return;
-        }
-
-        user.setBorrowLimit(limit);
-        System.out.println("Borrow limit updated.");
+        u.setBorrowLimit(limit);
     }
 
-    public void deleteUser(int userId, ArrayList<User> users, User admin) {
-        if (!(admin instanceof AdminUser)) {
-            System.out.println("Access denied.");
+    public void deleteUser(int id, ArrayList<User> users, User admin) {
+        User u = findUserById(users, id);
+
+        if (u == null) return;
+
+        if (u.getBorrowedCount() > 0) {
+            System.out.println("User has books.");
             return;
         }
 
-        User user = findUserById(users, userId);
-
-        if (user == null) {
-            System.out.println("User not found.");
-            return;
-        }
-
-        users.remove(user);
-        System.out.println("User deleted.");
+        users.remove(u);
     }
+    public void displayUsers(ArrayList<User> users) {
 
+        if (users.isEmpty()) {
+            System.out.println("No users found.");
+            return;
+        }
+
+        for (User u : users) {
+
+            String role = (u instanceof AdminUser) ? "ADMIN" : "USER";
+
+            if (u instanceof AdminUser) {
+                // Admin view (no borrow info)
+                System.out.println(
+                        "ID: " + u.getId() +
+                                " | Name: " + u.getName() +
+                                " | Role: " + role +
+                                " | Status: " + u.getStatus()
+                );
+            } else {
+                // Normal users
+                System.out.println(
+                        "ID: " + u.getId() +
+                                " | Name: " + u.getName() +
+                                " | Role: " + role +
+                                " | Status: " + u.getStatus() +
+                                (u.isBlocked() ? " (Blocked)" : "") +
+                                " | Borrowed: " + u.getBorrowedCount() + "/" + u.getBorrowLimit() +
+                                (u.isPremiumRequested() ? " | PremiumReq: YES" : "")
+                );
+            }
+        }
+    }
 }

@@ -23,7 +23,7 @@
  - Condition - User must: Borrow ≥1; Return ≥1
  - Add in User.java - int totalBorrowed; int totalReturned
  - Update - borrowBook() → totalBorrowed++; returnBook() → totalReturned++
-### Status-driven UI + Active Request (Implemented|Testing)
+### Status-driven UI + Active Request
  - Problem - User stuck in PENDING → no visibility
  - Solution - In User.java Add: private boolean activationRequested;
  - Logic - If PENDING → show: “Request activation”
