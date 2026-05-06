@@ -2,12 +2,12 @@ package org.example;
 
 public class StudentUser extends User {
 
-    private static final int LIMIT = 2;
-
     public StudentUser(int id, String name) {
         super(id, name);
+        setBorrowLimit(2); // moved here
     }
-
+}
+/*
     @Override
     public void borrowBook(Book book) {
         if (getBorrowedCount() >= LIMIT) {
@@ -16,4 +16,4 @@ public class StudentUser extends User {
         }
         super.borrowBook(book);
     }
-}
+} */

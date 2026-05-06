@@ -32,7 +32,7 @@ Step 3: Inheritance
 Step 4: Polymorphism 
 Step 5: Abstraction 
 
-Each concept will be introduced InshaAllah.
+Each concept will be introduced InshaAllah. (Introduced)
 
 ## Summary
 
@@ -40,7 +40,7 @@ The main goal of this project is not only to implement functionality but to buil
 understanding of all OOP principles through structured development.
 
 ## Project Summary
-Developed a Java-based Library Management System step by step, evolving it from a simple console
+Developing a Java-based Library Management System step by step, evolving it from a simple console
 program into a structured OOP application.
 ### OOP Concepts Implemented
  - Encapsulation - Private fields in Book and User ,Controlled access via getters and methods
@@ -49,7 +49,8 @@ program into a structured OOP application.
  - Polymorphism - Method overriding (borrowBook), Runtime behavior changes based on user type 
 ### System Features Built
 - Library Functions - Add books ,Display books ,Borrow books ,Return books 
-- User System - Multiple user roles: Student (limited borrowing), Premium (higher limit), Admin (no limit)
+- User System - Multiple user roles: Student (limited borrowing), Premium (higher limit), 
+Admin (Control over System)
 - Tracks borrowed books per user
 ### Runtime System
  - Console-based menu system 
@@ -60,8 +61,6 @@ program into a structured OOP application.
  - Exception handling (try-catch)
  - Safe scanner usage 
  - Empty input checks
-
-### Next Upgrades (Planning Stage)
+### Future Upgrade Plans
  - Database Integration
- - Spring Boot backend system
  - REST API version

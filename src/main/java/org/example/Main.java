@@ -226,7 +226,7 @@ public class Main {
         }
     }
 
-    // reusable safe input
+    // reusable safe int input
     private static int safeIntInput(Scanner sc) {
         try {
             int val = sc.nextInt();

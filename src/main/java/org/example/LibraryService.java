@@ -9,6 +9,12 @@ public class LibraryService implements LibraryOperations {
     public LibraryService() {
         this.books = new ArrayList<>();
     }
+    private User findUserById(ArrayList<User> users, int id) {
+        for (User user : users) {
+            if (user.getId() == id) return user;
+        }
+        return null;
+    }
 
     @Override
     public void addBook(Book newBook, User user) {
@@ -149,4 +155,40 @@ public class LibraryService implements LibraryOperations {
         books.remove(book);
         System.out.println("Book deleted successfully.");
     }
+    public void approveUser(int userId, ArrayList<User> users, User admin) {
+
+        if (!(admin instanceof AdminUser)) {
+            System.out.println("Access denied.");
+            return;
+        }
+
+        User user = findUserById(users, userId);
+
+        if (user == null) {
+            System.out.println("User not found.");
+            return;
+        }
+
+        user.approve();
+        System.out.println("User approved successfully.");
+    }
+
+    public void rejectUser(int userId, ArrayList<User> users, User admin) {
+
+        if (!(admin instanceof AdminUser)) {
+            System.out.println("Access denied.");
+            return;
+        }
+
+        User user = findUserById(users, userId);
+
+        if (user == null) {
+            System.out.println("User not found.");
+            return;
+        }
+
+        user.reject();
+        System.out.println("User rejected.");
+    }
+
 }

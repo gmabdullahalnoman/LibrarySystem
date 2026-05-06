@@ -8,4 +8,7 @@ public interface LibraryOperations {
 
     void updateBook(int id, String title, String author, int quantity, User user);
     void deleteBook(int id, User user);
+
+    void approveUser(int userId, java.util.ArrayList<User> users, User admin);
+    void rejectUser(int userId, java.util.ArrayList<User> users, User admin);
 }

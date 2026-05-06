@@ -1,9 +1,9 @@
 ## Phase: User Management System Upgrade
-### Registration Workflow
+### Registration Workflow (Implemented|Testing)
  - Student registers → status = PENDING
  - Admin: Approve → ACTIVE | Deny → REJECTED
  - Add - status field in User.java
-### Remove Direct Premium Registration
+### Remove Direct Premium Registration(Implemented|Testing)
  - Comment out Premium from register
  - Add - Student → request upgrade | Admin → approve/reject
 ### User Control (Admin)
