@@ -190,5 +190,74 @@ public class LibraryService implements LibraryOperations {
         user.reject();
         System.out.println("User rejected.");
     }
+    public void approvePremium(int userId, ArrayList<User> users, User admin) {
+        if (!(admin instanceof AdminUser)) {
+            System.out.println("Access denied.");
+            return;
+        }
+
+        User user = findUserById(users, userId);
+
+        if (user == null || !user.isPremiumRequested()) {
+            System.out.println("No request found.");
+            return;
+        }
+
+        user.setBorrowLimit(5);
+        user.clearPremiumRequest();
+
+        System.out.println("User upgraded to Premium.");
+    }
+
+    public void setUserBlock(int userId, boolean block, ArrayList<User> users, User admin) {
+        if (!(admin instanceof AdminUser)) {
+            System.out.println("Access denied.");
+            return;
+        }
+
+        User user = findUserById(users, userId);
+
+        if (user == null) {
+            System.out.println("User not found.");
+            return;
+        }
+
+        user.setBlocked(block);
+        System.out.println(block ? "User blocked." : "User unblocked.");
+    }
+
+    public void updateUserLimit(int userId, int limit, ArrayList<User> users, User admin) {
+        if (!(admin instanceof AdminUser)) {
+            System.out.println("Access denied.");
+            return;
+        }
+
+        User user = findUserById(users, userId);
+
+        if (user == null) {
+            System.out.println("User not found.");
+            return;
+        }
+
+        user.setBorrowLimit(limit);
+        System.out.println("Borrow limit updated.");
+    }
+
+    public void deleteUser(int userId, ArrayList<User> users, User admin) {
+        if (!(admin instanceof AdminUser)) {
+            System.out.println("Access denied.");
+            return;
+        }
+
+        User user = findUserById(users, userId);
+
+        if (user == null) {
+            System.out.println("User not found.");
+            return;
+        }
+
+        users.remove(user);
+        System.out.println("User deleted.");
+    }
 
 }

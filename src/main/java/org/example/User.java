@@ -14,13 +14,15 @@ public class User extends Person {
     private Status status;
     private boolean isBlocked;
     private int borrowLimit;
+    private boolean premiumRequested;
 
     public User(int userId, String name) {
         super(userId, name);
         this.borrowedBooks = new ArrayList<>();
-        this.status = Status.PENDING; // default
+        this.status = Status.PENDING;
         this.isBlocked = false;
-        this.borrowLimit = 2; // default (can override in child)
+        this.borrowLimit = 2;
+        this.premiumRequested = false;
     }
 
     public void borrowBook(Book book) {
@@ -61,11 +63,7 @@ public class User extends Person {
         }
 
         for (Book book : borrowedBooks) {
-            System.out.println(
-                    book.getId() + " | " +
-                            book.getTitle() + " by " +
-                            book.getAuthor()
-            );
+            System.out.println(book.getId() + " | " + book.getTitle() + " by " + book.getAuthor());
         }
     }
 
@@ -80,7 +78,7 @@ public class User extends Person {
         return false;
     }
 
-    // NEW controls
+    // Status control
     public Status getStatus() {
         return status;
     }
@@ -93,6 +91,7 @@ public class User extends Person {
         this.status = Status.REJECTED;
     }
 
+    // Block control
     public void setBlocked(boolean blocked) {
         isBlocked = blocked;
     }
@@ -101,11 +100,30 @@ public class User extends Person {
         return isBlocked;
     }
 
+    // Borrow limit
     public void setBorrowLimit(int limit) {
         this.borrowLimit = limit;
     }
 
     public int getBorrowLimit() {
         return borrowLimit;
+    }
+
+    // Premium request
+    public void requestPremium() {
+        if (premiumRequested) {
+            System.out.println("Already requested.");
+            return;
+        }
+        premiumRequested = true;
+        System.out.println("Premium request sent.");
+    }
+
+    public boolean isPremiumRequested() {
+        return premiumRequested;
+    }
+
+    public void clearPremiumRequest() {
+        premiumRequested = false;
     }
 }

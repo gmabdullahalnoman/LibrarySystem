@@ -7,9 +7,9 @@ public class Main {
 
     private static int userIdCounter = 1;
 
-    static void main() {
+    public static void main(String[] args) {
 
-        LibraryOperations library = new LibraryService();
+        LibraryService library = new LibraryService();
         ArrayList<User> users = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
 
@@ -18,69 +18,62 @@ public class Main {
 
             while (true) {
 
-                // Register & Login Menu
+                // AUTH MENU
                 if (currentUser == null) {
                     System.out.println("\n===== Welcome =====");
-                    System.out.println("1. Sign-Up (Register New)");
-                    System.out.println("2. Login (Existing Account)");
+                    System.out.println("1. Register");
+                    System.out.println("2. Login");
                     System.out.println("0. Exit");
                     System.out.print("Choice: ");
 
-                    int authChoice = safeIntInput(sc);
-                    if (authChoice == -1) continue;
+                    int auth = safeIntInput(sc);
+                    if (auth == -1) continue;
 
-                    switch (authChoice) {
+                    switch (auth) {
                         case 1:
-                            System.out.println("Select User Type:");
                             System.out.println("1. Student");
-                            System.out.println("2. Premium");
-                            System.out.println("3. Admin");
+                            System.out.println("2. Admin");
                             System.out.print("Choice: ");
 
                             int type = safeIntInput(sc);
                             if (type == -1) continue;
 
-                            System.out.print("Enter User Name: ");
+                            System.out.print("Enter Name: ");
                             String name = sc.nextLine();
 
                             if (name.isEmpty()) {
-                                System.out.println("User Name cannot be empty.");
+                                System.out.println("Name cannot be empty.");
                                 continue;
                             }
 
                             User newUser;
-
-                            switch (type) {
-                                case 1:
-                                    newUser = new StudentUser(userIdCounter++, name);
-                                    break;
-                                case 2:
-                                    newUser = new PremiumUser(userIdCounter++, name);
-                                    break;
-                                case 3:
-                                    newUser = new AdminUser(userIdCounter++, name);
-                                    break;
-                                default:
-                                    System.out.println("Invalid type.");
-                                    continue;
+                            if (type == 1) {
+                                newUser = new StudentUser(userIdCounter++, name);
+                            } else if (type == 2) {
+                                newUser = new AdminUser(userIdCounter++, name);
+                            } else {
+                                System.out.println("Invalid type.");
+                                continue;
                             }
-                            users.add(newUser);
-                            System.out.println("Registered. Your ID: " + newUser.getId());
-                            break;
-                        case 2:
-                            System.out.print("Enter User ID: ");
-                            int loginId = safeIntInput(sc);
-                            if (loginId == -1) continue;
 
-                            currentUser = findUserById(users, loginId);
+                            users.add(newUser);
+                            System.out.println("Registered. ID: " + newUser.getId());
+                            break;
+
+                        case 2:
+                            System.out.print("Enter ID: ");
+                            int id = safeIntInput(sc);
+                            if (id == -1) continue;
+
+                            currentUser = findUserById(users, id);
                             if (currentUser == null) {
                                 System.out.println("User not found.");
                             } else {
-                                System.out.println("Welcome " + currentUser.getName() +" to the Library.");
+                                System.out.println("Welcome " + currentUser.getName());
                             }
                             break;
+
                         case 0:
-                            System.out.println("Exiting...");
                             return;
 
                         default:
@@ -89,54 +82,39 @@ public class Main {
                     continue;
                 }
 
-                // LIBRARY MENU
-                System.out.println("\n===== Library Menu =====");
-
+                // ADMIN MENU
                 if (currentUser instanceof AdminUser) {
+
+                    System.out.println("\n===== Admin Menu =====");
                     System.out.println("1. Add Book");
                     System.out.println("2. Display Books");
                     System.out.println("3. Update Book");
                     System.out.println("4. Delete Book");
-                    System.out.println("5. Logout");
+                    System.out.println("5. Approve User");
+                    System.out.println("6. Reject User");
+                    System.out.println("7. Approve Premium");
+                    System.out.println("8. Block User");
+                    System.out.println("9. Unblock User");
+                    System.out.println("10. Update User Limit");
+                    System.out.println("11. Delete User");
+                    System.out.println("12. Logout");
                     System.out.println("0. Exit");
-                } else {
-                    System.out.println("1. Display Books");
-                    System.out.println("2. Borrow Book");
-                    System.out.println("3. Return Book");
-                    System.out.println("4. View My Books");
-                    System.out.println("5. Logout");
-                    System.out.println("0. Exit");
-                }
 
-                System.out.print("Choose: ");
-                int choice = safeIntInput(sc);
-                if (choice == -1) continue;
-
-                if (currentUser instanceof AdminUser) {
+                    int choice = safeIntInput(sc);
+                    if (choice == -1) continue;
 
                     switch (choice) {
+
                         case 1:
-                            System.out.print("Enter Title: ");
-                            String title = sc.nextLine();
+                            System.out.print("Title: ");
+                            String t = sc.nextLine();
+                            System.out.print("Author: ");
+                            String a = sc.nextLine();
+                            System.out.print("Quantity: ");
+                            int q = safeIntInput(sc);
+                            if (q <= 0) break;
 
-                            System.out.print("Enter Author: ");
-                            String author = sc.nextLine();
-
-                            if (title.isEmpty() || author.isEmpty()) {
-                                System.out.println("Title/Author cannot be empty.");
-                                break;
-                            }
-
-                            System.out.print("Enter Quantity: ");
-                            int qty = safeIntInput(sc);
-                            if (qty == -1) break;
-
-                            if (qty <= 0) {
-                                System.out.println("Quantity must be positive.");
-                                break;
-                            }
-
-                            library.addBook(new Book(title, author, qty), currentUser);
+                            library.addBook(new Book(t, a, q), currentUser);
                             break;
 
                         case 2:
@@ -144,62 +122,99 @@ public class Main {
                             break;
 
                         case 3:
-                            System.out.print("Enter Book ID: ");
-                            int upId = safeIntInput(sc);
-                            if (upId == -1) break;
+                            System.out.print("Book ID: ");
+                            int bid = safeIntInput(sc);
+                            if (bid == -1) break;
 
-                            System.out.print("New Title (enter to skip): ");
-                            String newTitle = sc.nextLine();
+                            System.out.print("New Title: ");
+                            String nt = sc.nextLine();
+                            System.out.print("New Author: ");
+                            String na = sc.nextLine();
+                            System.out.print("New Qty: ");
+                            int nq = safeIntInput(sc);
 
-                            System.out.print("New Author (enter to skip): ");
-                            String newAuthor = sc.nextLine();
-
-                            System.out.print("New Quantity (-1 to skip): ");
-                            int newQty = safeIntInput(sc);
-
-                            library.updateBook(upId, newTitle, newAuthor, newQty, currentUser);
+                            library.updateBook(bid, nt, na, nq, currentUser);
                             break;
 
                         case 4:
-                            System.out.print("Enter Book ID: ");
-                            int delId = safeIntInput(sc);
-                            if (delId == -1) break;
-
-                            library.deleteBook(delId, currentUser);
+                            System.out.print("Book ID: ");
+                            library.deleteBook(safeIntInput(sc), currentUser);
                             break;
 
                         case 5:
+                            System.out.print("User ID: ");
+                            library.approveUser(safeIntInput(sc), users, currentUser);
+                            break;
+
+                        case 6:
+                            System.out.print("User ID: ");
+                            library.rejectUser(safeIntInput(sc), users, currentUser);
+                            break;
+
+                        case 7:
+                            System.out.print("User ID: ");
+                            library.approvePremium(safeIntInput(sc), users, currentUser);
+                            break;
+
+                        case 8:
+                            System.out.print("User ID: ");
+                            library.setUserBlock(safeIntInput(sc), true, users, currentUser);
+                            break;
+
+                        case 9:
+                            System.out.print("User ID: ");
+                            library.setUserBlock(safeIntInput(sc), false, users, currentUser);
+                            break;
+
+                        case 10:
+                            System.out.print("User ID: ");
+                            int uid = safeIntInput(sc);
+                            System.out.print("New Limit: ");
+                            int lim = safeIntInput(sc);
+                            library.updateUserLimit(uid, lim, users, currentUser);
+                            break;
+
+                        case 11:
+                            System.out.print("User ID: ");
+                            library.deleteUser(safeIntInput(sc), users, currentUser);
+                            break;
+
+                        case 12:
                             currentUser = null;
-                            System.out.println("Logged out.");
                             break;
 
                         case 0:
-                            System.out.println("Exiting...");
                             return;
-
-                        default:
-                            System.out.println("Invalid choice.");
                     }
+
                 } else {
+                    // USER MENU
+                    System.out.println("\n===== User Menu =====");
+                    System.out.println("1. Display Books");
+                    System.out.println("2. Borrow Book");
+                    System.out.println("3. Return Book");
+                    System.out.println("4. My Books");
+                    System.out.println("5. Request Premium");
+                    System.out.println("6. Logout");
+                    System.out.println("0. Exit");
+
+                    int choice = safeIntInput(sc);
+                    if (choice == -1) continue;
+
                     switch (choice) {
+
                         case 1:
                             library.displayBooks();
                             break;
 
                         case 2:
-                            System.out.print("Enter Book ID: ");
-                            int borrowId = safeIntInput(sc);
-                            if (borrowId == -1) break;
-
-                            library.borrowBook(borrowId, currentUser);
+                            System.out.print("Book ID: ");
+                            library.borrowBook(safeIntInput(sc), currentUser);
                             break;
 
                         case 3:
-                            System.out.print("Enter Book ID: ");
-                            int returnId = safeIntInput(sc);
-                            if (returnId == -1) break;
-
-                            library.returnBook(returnId, currentUser);
+                            System.out.print("Book ID: ");
+                            library.returnBook(safeIntInput(sc), currentUser);
                             break;
 
                         case 4:
@@ -207,16 +222,15 @@ public class Main {
                             break;
 
                         case 5:
+                            currentUser.requestPremium();
+                            break;
+
+                        case 6:
                             currentUser = null;
-                            System.out.println("Logged out.");
                             break;
 
                         case 0:
-                            System.out.println("Exiting...");
                             return;
-
-                        default:
-                            System.out.println("Invalid choice.");
                     }
                 }
             }
@@ -226,22 +240,21 @@ public class Main {
         }
     }
 
-    // reusable safe int input
     private static int safeIntInput(Scanner sc) {
         try {
             int val = sc.nextInt();
             sc.nextLine();
             return val;
         } catch (Exception e) {
-            System.out.println("Invalid input. Please enter a valid number.");
+            System.out.println("Invalid input.");
             sc.nextLine();
             return -1;
         }
     }
 
     private static User findUserById(ArrayList<User> users, int id) {
-        for (User user : users) {
-            if (user.getId() == id) return user;
+        for (User u : users) {
+            if (u.getId() == id) return u;
         }
         return null;
     }
