@@ -16,6 +16,11 @@ public class User extends Person {
     private int borrowLimit;
     private boolean premiumRequested;
 
+    // NEW tracking
+    private int totalBorrowed;
+    private int totalReturned;
+    private boolean activationRequested;
+
     public User(int userId, String name) {
         super(userId, name);
         this.borrowedBooks = new ArrayList<>();
@@ -23,6 +28,10 @@ public class User extends Person {
         this.isBlocked = false;
         this.borrowLimit = 2;
         this.premiumRequested = false;
+
+        this.totalBorrowed = 0;
+        this.totalReturned = 0;
+        this.activationRequested = false;
     }
 
     public void borrowBook(Book book) {
@@ -47,15 +56,27 @@ public class User extends Person {
         }
 
         borrowedBooks.add(book);
+        totalBorrowed++; // track
     }
 
     public void returnBook(Book book) {
-        borrowedBooks.remove(book);
+        if (borrowedBooks.remove(book)) {
+            totalReturned++; // track
+        }
     }
 
     public void showBorrowedBooks() {
         System.out.println("Borrowed: " + borrowedBooks.size() + "/" + borrowLimit);
         System.out.println("Status: " + status + (isBlocked ? " (Blocked)" : ""));
+
+        // hints
+        if (status == Status.PENDING && !activationRequested) {
+            System.out.println(">> You can request account activation.");
+        }
+
+        if (premiumRequested) {
+            System.out.println(">> Premium request pending approval.");
+        }
 
         if (borrowedBooks.isEmpty()) {
             System.out.println("No borrowed books.");
@@ -85,6 +106,7 @@ public class User extends Person {
 
     public void approve() {
         this.status = Status.ACTIVE;
+        this.activationRequested = false;
     }
 
     public void reject() {
@@ -109,12 +131,19 @@ public class User extends Person {
         return borrowLimit;
     }
 
-    // Premium request
+    // Premium request (with eligibility)
     public void requestPremium() {
+
         if (premiumRequested) {
             System.out.println("Already requested.");
             return;
         }
+
+        if (!(totalBorrowed > 0 && totalReturned > 0)) {
+            System.out.println("You must borrow and return at least 1 book before requesting premium.");
+            return;
+        }
+
         premiumRequested = true;
         System.out.println("Premium request sent.");
     }
@@ -125,5 +154,26 @@ public class User extends Person {
 
     public void clearPremiumRequest() {
         premiumRequested = false;
+    }
+
+    // Activation request
+    public void requestActivation() {
+
+        if (status != Status.PENDING) {
+            System.out.println("Activation not required.");
+            return;
+        }
+
+        if (activationRequested) {
+            System.out.println("Activation already requested.");
+            return;
+        }
+
+        activationRequested = true;
+        System.out.println("Activation request sent.");
+    }
+
+    public boolean isActivationRequested() {
+        return activationRequested;
     }
 }
