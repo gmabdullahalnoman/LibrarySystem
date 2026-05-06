@@ -99,6 +99,7 @@ public class Main {
                     System.out.println("11. Delete User");
                     System.out.println("12. Logout");
                     System.out.println("0. Exit");
+                    System.out.print("Choice: ");
 
                     int choice = safeIntInput(sc);
                     if (choice == -1) continue;
@@ -197,6 +198,7 @@ public class Main {
                     System.out.println("5. Request Premium");
                     System.out.println("6. Logout");
                     System.out.println("0. Exit");
+                    System.out.print("Choice: ");
 
                     int choice = safeIntInput(sc);
                     if (choice == -1) continue;
