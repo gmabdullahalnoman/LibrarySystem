@@ -157,12 +157,26 @@ public class LibraryService implements LibraryOperations {
 
     @Override
     public void approveUser(int userId, ArrayList<User> users, User admin) {
-        if (!(admin instanceof AdminUser)) return;
 
-        User u = findUserById(users, userId);
-        if (u == null) return;
+        if (!(admin instanceof AdminUser)) {
+            System.out.println("Access denied.");
+            return;
+        }
 
-        u.approve();
+        User user = findUserById(users, userId);
+
+        if (user == null) {
+            System.out.println("User not found.");
+            return;
+        }
+
+        // must request activation first
+        if (!user.isActivationRequested()) {
+            System.out.println("User did not request activation.");
+            return;
+        }
+
+        user.approve();
         System.out.println("User approved.");
     }
 

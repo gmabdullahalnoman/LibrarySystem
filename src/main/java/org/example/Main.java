@@ -20,7 +20,6 @@ public class Main {
 
                 // AUTH MENU
                 if (currentUser == null) {
-                    System.out.println("to solve - admin can still approve without student sends approve request");
                     System.out.println("\n===== Welcome =====");
                     System.out.println("1. Register");
                     System.out.println("2. Login");
