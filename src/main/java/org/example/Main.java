@@ -100,6 +100,7 @@ public class Main {
                     System.out.println("12. Delete User");
                     System.out.println("13. Logout");
                     System.out.println("0. Exit");
+                    System.out.print("Choice: ");
 
                     int choice = safeIntInput(sc);
                     if (choice == -1) continue;
@@ -206,8 +207,12 @@ public class Main {
                         System.out.println("Status: " + currentUser.getStatus());
 
                         if (currentUser.getStatus() == User.Status.PENDING) {
-                            System.out.println(">> Your account is waiting for admin approval.");
-                            System.out.println("1. Request Activation");
+                            if (currentUser.isActivationRequested()) {
+                                System.out.println(">> Activation request pending.");
+                            } else {
+                                System.out.println(">> Send request to activate your account.");
+                                System.out.println("1. Request Activation");
+                            }
                         }
 
                         System.out.println("2. View My Status");

@@ -15,7 +15,6 @@ public class User extends Person {
     private boolean isBlocked;
     private int borrowLimit;
     private boolean premiumRequested;
-
     // NEW tracking
     private int totalBorrowed;
     private int totalReturned;
@@ -159,18 +158,16 @@ public class User extends Person {
     // Activation request
     public void requestActivation() {
 
-        if (status != Status.PENDING) {
-            System.out.println("Activation not required.");
-            return;
-        }
-
         if (activationRequested) {
-            System.out.println("Activation already requested.");
+            System.out.println("Activation request already pending.");
             return;
         }
 
         activationRequested = true;
-        System.out.println("Activation request sent.");
+        System.out.println("Activation request sent to admin.");
+    }
+    public void clearActivationRequest() {
+        activationRequested = false;
     }
 
     public boolean isActivationRequested() {
