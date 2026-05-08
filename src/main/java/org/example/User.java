@@ -110,6 +110,7 @@ public class User extends Person {
 
     public void reject() {
         this.status = Status.REJECTED;
+        this.activationRequested = false;
     }
 
     // Block control

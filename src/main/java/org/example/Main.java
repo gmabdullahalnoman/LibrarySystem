@@ -153,8 +153,21 @@ public class Main {
                             break;
 
                         case 6:
+
+                            boolean hasRequests = library.displayActivationRequests(users);
+
+                            if (!hasRequests) {
+                                break;
+                            }
+
                             System.out.print("User ID: ");
-                            library.approveUser(safeIntInput(sc), users, currentUser);
+
+                            library.approveUser(
+                                    safeIntInput(sc),
+                                    users,
+                                    currentUser
+                            );
+
                             break;
 
                         case 7:

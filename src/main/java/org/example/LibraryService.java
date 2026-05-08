@@ -260,4 +260,32 @@ public class LibraryService implements LibraryOperations {
             }
         }
     }
+    public boolean displayActivationRequests(ArrayList<User> users) {
+
+        boolean found = false;
+
+        System.out.println("===== Activation Requests =====");
+
+        for (User u : users) {
+
+            if (!(u instanceof AdminUser)
+                    && u.isActivationRequested()
+                    && u.getStatus() == User.Status.PENDING) {
+
+                System.out.println(
+                        "ID: " + u.getId() +
+                                " | Name: " + u.getName() +
+                                " | Status: " + u.getStatus()
+                );
+
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No activation requests found.");
+        }
+
+        return found;
+    }
 }
