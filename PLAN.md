@@ -37,3 +37,10 @@
 ### Block + Status Messaging
  - Improve showBorrowedBooks() - 
  - Show - Status, Blocked, Pending actions: “Request activation”, “Premium pending”
+
+ - Approve premium now shows pending premium requests first. 
+ - Update/delete book now shows available books before input. 
+ - Block/update user now shows user list first. 
+ - Unblock user now shows only blocked users. 
+ - Delete user now shows simplified user list (ID + name only). 
+ - Fixed unblock case logic and replaced

@@ -192,7 +192,7 @@ public class LibraryService implements LibraryOperations {
     }
 
     // EXTRA methods (not in interface)
-    public void approvePremium(int id, ArrayList<User> users, User admin) {
+    public void approvePremium(int id, ArrayList<User> users) {
         User u = findUserById(users, id);
         if (u == null || !u.isPremiumRequested()) return;
 
@@ -287,5 +287,40 @@ public class LibraryService implements LibraryOperations {
         }
 
         return found;
+    }
+    public boolean displayPremiumRequests(ArrayList<User> users) {
+        boolean found = false;
+
+        System.out.println("===== Premium Requests =====");
+
+        for (User u : users) {
+            if (u.isPremiumRequested()) {
+                System.out.println("ID: " + u.getId() + " | Name: " + u.getName());
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No premium requests.");
+        }
+
+        return found;
+    }
+    public boolean displayBlockedUsers(ArrayList<User> users) {
+        boolean found = false;
+
+        System.out.println("===== Blocked Users =====");
+
+        for (User u : users) {
+            if (u.isBlocked()) {
+                System.out.println("ID: " + u.getId() + " | Name: " + u.getName());
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No blocked users.");
+        }
+        return  found;
     }
 }

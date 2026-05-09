@@ -124,6 +124,7 @@ public class Main {
                             break;
 
                         case 3:
+                            library.displayBooks();
                             System.out.print("Book ID: ");
                             int bid = safeIntInput(sc);
                             if (bid == -1) break;
@@ -141,6 +142,7 @@ public class Main {
                             break;
 
                         case 4:
+                            library.displayBooks();
                             System.out.print("Enter Book ID: ");
                             int delId = safeIntInput(sc);
                             if (delId == -1) break;
@@ -176,8 +178,10 @@ public class Main {
                             break;
 
                         case 8:
+                            boolean hasReq = library.displayPremiumRequests(users);
+                            if (!hasReq) break;
                             System.out.print("User ID: ");
-                            library.approvePremium(safeIntInput(sc), users, currentUser);
+                            library.approvePremium(safeIntInput(sc), users);
                             break;
 
                         case 9:
@@ -186,8 +190,18 @@ public class Main {
                             break;
 
                         case 10:
+                            boolean isBlocked = library.displayBlockedUsers(users);
+
+                            if (!isBlocked) {
+                                break;
+                            }
                             System.out.print("User ID: ");
-                            library.setUserBlock(safeIntInput(sc), false, users, currentUser);
+                            library.setUserBlock(
+                                    safeIntInput(sc),
+                                    false,
+                                    users,
+                                    currentUser
+                            );
                             break;
 
                         case 11:
@@ -199,6 +213,7 @@ public class Main {
                             break;
 
                         case 12:
+                            library.displayUsers(users);
                             System.out.print("User ID: ");
                             library.deleteUser(safeIntInput(sc), users, currentUser);
                             break;
