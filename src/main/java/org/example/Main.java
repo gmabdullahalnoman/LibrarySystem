@@ -41,6 +41,17 @@ public class Main {
                             System.out.print("Enter Name: ");
                             String name = sc.nextLine();
 
+                            System.out.print("Enter Username: ");
+                            String username = sc.nextLine();
+
+                            if (findUserByUsername(users, username) != null) {
+                                System.out.println("Username already exists.");
+                                continue;
+                            }
+
+                            System.out.print("Enter Password: ");
+                            String password = sc.nextLine();
+
                             if (name.isEmpty()) {
                                 System.out.println("Name cannot be empty.");
                                 continue;
@@ -48,24 +59,36 @@ public class Main {
 
                             User newUser;
                             if (type == 1) {
-                                newUser = new StudentUser(userIdCounter++, name);
+                                newUser = new StudentUser(userIdCounter++, name, username, password);
                             } else if (type == 2) {
-                                newUser = new AdminUser(userIdCounter++, name);
+                                newUser = new AdminUser(userIdCounter++, name, username, password);
                             } else {
                                 System.out.println("Invalid type.");
                                 continue;
                             }
 
                             users.add(newUser);
-                            System.out.println("Registered. ID: " + newUser.getId());
+                            System.out.println("Registered successfully.");
+                            System.out.println("Username: " + newUser.getUsername());
                             break;
 
                         case 2:
-                            System.out.print("Enter ID: ");
-                            int id = safeIntInput(sc);
-                            if (id == -1) continue;
+                            System.out.print("Enter Username: ");
+                            String loginUsername = sc.nextLine();
 
-                            currentUser = findUserById(users, id);
+                            System.out.print("Enter Password: ");
+                            String loginPassword = sc.nextLine();
+                            currentUser = findUserByUsername(users, loginUsername);
+                            if (currentUser == null) {
+                                System.out.println("User not found.");
+                                continue;
+                            }
+
+                            if (!currentUser.getPassword().equals(loginPassword)) {
+                                System.out.println("Incorrect password.");
+                                currentUser = null;
+                                continue;
+                            }
                             if (currentUser == null) {
                                 System.out.println("User not found.");
                             } else {
@@ -363,9 +386,12 @@ public class Main {
         }
     }
 
-    private static User findUserById(ArrayList<User> users, int id) {
+    private static User findUserByUsername(ArrayList<User> users, String username) {
+
         for (User u : users) {
-            if (u.getId() == id) return u;
+            if (u.getUsername().equalsIgnoreCase(username)) {
+                return u;
+            }
         }
         return null;
     }

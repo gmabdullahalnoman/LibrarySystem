@@ -44,3 +44,22 @@
  - Unblock user now shows only blocked users. 
  - Delete user now shows simplified user list (ID + name only). 
  - Fixed unblock case logic and replaced
+
+### User Authentication System Implemented
+ - Added Authentication Fields -  Inside User : username, password
+ - Updated Constructors - All user types now require: name, username, password
+ - Registration Upgrade - Implemented: username input, password input, duplicate username prevention
+ - Login Upgrade - Old system: login by ID 
+                 - New system: login by username + password
+ - Authentication Validation - Implemented: 
+                       incorrect password handling
+                       username existence check
+                       polite error messages
+                       no program crash on invalid input
+ - Admin User Visibility Upgrade - Admin can now view:
+                                 usernames
+                                 roles
+                                 statuses
+                                 limits
+                                 blocked state
+                                 Passwords remain hidden

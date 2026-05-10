@@ -19,8 +19,10 @@ public class User extends Person {
     private int totalBorrowed;
     private int totalReturned;
     private boolean activationRequested;
+    private String username;
+    private String password;
 
-    public User(int userId, String name) {
+    public User(int userId, String name, String username, String password) {
         super(userId, name);
         this.borrowedBooks = new ArrayList<>();
         this.status = Status.PENDING;
@@ -31,6 +33,8 @@ public class User extends Person {
         this.totalBorrowed = 0;
         this.totalReturned = 0;
         this.activationRequested = false;
+        this.username = username;
+        this.password = password;
     }
 
     public void borrowBook(Book book) {
@@ -173,5 +177,12 @@ public class User extends Person {
 
     public boolean isActivationRequested() {
         return activationRequested;
+    }
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

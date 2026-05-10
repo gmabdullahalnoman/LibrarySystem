@@ -281,28 +281,29 @@ public class LibraryService implements LibraryOperations {
             return;
         }
 
-        for (User u : users) {
+        for (User user : users) {
 
-            String role = (u instanceof AdminUser) ? "ADMIN" : "USER";
+            String role = (user instanceof AdminUser) ? "Admin" : "Student";
 
-            if (u instanceof AdminUser) {
-                // Admin view (no borrow info)
+            // admin view
+            if (user instanceof AdminUser) {
+
                 System.out.println(
-                        "ID: " + u.getId() +
-                                " | Name: " + u.getName() +
-                                " | Role: " + role +
-                                " | Status: " + u.getStatus()
+                        "ID: " + user.getId() +
+                                " | Name: " + user.getName() +
+                                " | Username: " + user.getUsername() +
+                                " | Role: " + role
                 );
             } else {
-                // Normal users
+
                 System.out.println(
-                        "ID: " + u.getId() +
-                                " | Name: " + u.getName() +
+                        "ID: " + user.getId() +
+                                " | Name: " + user.getName() +
+                                " | Username: " + user.getUsername() +
                                 " | Role: " + role +
-                                " | Status: " + u.getStatus() +
-                                (u.isBlocked() ? " (Blocked)" : "") +
-                                " | Borrowed: " + u.getBorrowedCount() + "/" + u.getBorrowLimit() +
-                                (u.isPremiumRequested() ? " | PremiumReq: YES" : "")
+                                " | Status: " + user.getStatus() +
+                                (user.isBlocked() ? " | BLOCKED" : "") +
+                                " | Limit: " + user.getBorrowLimit()
                 );
             }
         }
