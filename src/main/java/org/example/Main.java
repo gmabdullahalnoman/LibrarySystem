@@ -124,7 +124,14 @@ public class Main {
                             break;
 
                         case 3:
+
+                            if (!library.hasBooks()) {
+                                System.out.println("No books available.");
+                                break;
+                            }
+
                             library.displayBooks();
+
                             System.out.print("Book ID: ");
                             int bid = safeIntInput(sc);
                             if (bid == -1) break;
@@ -142,9 +149,17 @@ public class Main {
                             break;
 
                         case 4:
+
+                            if (!library.hasBooks()) {
+                                System.out.println("No books available.");
+                                break;
+                            }
+
                             library.displayBooks();
+
                             System.out.print("Enter Book ID: ");
                             int delId = safeIntInput(sc);
+
                             if (delId == -1) break;
 
                             library.deleteBook(delId, currentUser, users);
@@ -173,6 +188,10 @@ public class Main {
                             break;
 
                         case 7:
+                            hasRequests = library.displayActivationRequests(users);
+                            if (!hasRequests) {
+                                break;
+                            }
                             System.out.print("User ID: ");
                             library.rejectUser(safeIntInput(sc), users, currentUser);
                             break;
@@ -185,6 +204,7 @@ public class Main {
                             break;
 
                         case 9:
+                            library.displayUsers(users);
                             System.out.print("User ID: ");
                             library.setUserBlock(safeIntInput(sc), true, users, currentUser);
                             break;

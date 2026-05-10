@@ -201,18 +201,65 @@ public class LibraryService implements LibraryOperations {
         System.out.println("Upgraded.");
     }
 
-    public void setUserBlock(int id, boolean block, ArrayList<User> users, User admin) {
-        User u = findUserById(users, id);
-        if (u == null) return;
+    public void setUserBlock(int userId, boolean block, ArrayList<User> users, User admin) {
 
-        u.setBlocked(block);
+        if (!(admin instanceof AdminUser)) {
+            System.out.println("Access denied.");
+            return;
+        }
+
+        User user = findUserById(users, userId);
+
+        if (user == null) {
+            System.out.println("User not found.");
+            return;
+        }
+
+        // cannot block admin
+        if (user instanceof AdminUser) {
+            System.out.println("Admin accounts cannot be blocked.");
+            return;
+        }
+
+        user.setBlocked(block);
+
+        System.out.println(block ?
+                "User blocked successfully." :
+                "User unblocked successfully.");
     }
 
-    public void updateUserLimit(int id, int limit, ArrayList<User> users, User admin) {
-        User u = findUserById(users, id);
-        if (u == null) return;
+    public void updateUserLimit(int userId, int limit, ArrayList<User> users, User admin) {
 
-        u.setBorrowLimit(limit);
+        if (!(admin instanceof AdminUser)) {
+            System.out.println("Access denied.");
+            return;
+        }
+
+        User user = findUserById(users, userId);
+
+        if (user == null) {
+            System.out.println("User not found.");
+            return;
+        }
+        // only ACTIVE premium users
+        if (user.getBorrowLimit() < 5) {
+            System.out.println("User is not a premium user.");
+            return;
+        }
+
+        if (user.getStatus() != User.Status.ACTIVE) {
+            System.out.println("User is not active.");
+            return;
+        }
+
+        if (limit < 5) {
+            System.out.println("Premium limit cannot be below 5.");
+            return;
+        }
+
+        user.setBorrowLimit(limit);
+
+        System.out.println("Premium user borrow limit updated.");
     }
 
     public void deleteUser(int id, ArrayList<User> users, User admin) {
@@ -322,5 +369,8 @@ public class LibraryService implements LibraryOperations {
             System.out.println("No blocked users.");
         }
         return  found;
+    }
+    public boolean hasBooks() {
+        return !books.isEmpty();
     }
 }
