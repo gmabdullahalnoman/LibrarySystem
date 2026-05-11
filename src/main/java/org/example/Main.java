@@ -10,6 +10,7 @@ public class Main {
     static void main() {
 
         LibraryService library = new LibraryService();
+        UserService userService = new UserService();
         ArrayList<User> users = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
 
@@ -189,12 +190,12 @@ public class Main {
                             break;
 
                         case 5: // NEW
-                            library.displayUsers(users);
+                            userService.displayUsers(users);
                             break;
 
                         case 6:
 
-                            boolean hasRequests = library.displayActivationRequests(users);
+                            boolean hasRequests = userService.displayActivationRequests(users);
 
                             if (!hasRequests) {
                                 break;
@@ -202,7 +203,7 @@ public class Main {
 
                             System.out.print("User ID: ");
 
-                            library.approveUser(
+                            userService.approveUser(
                                     safeIntInput(sc),
                                     users,
                                     currentUser
@@ -211,35 +212,35 @@ public class Main {
                             break;
 
                         case 7:
-                            hasRequests = library.displayActivationRequests(users);
+                            hasRequests = userService.displayActivationRequests(users);
                             if (!hasRequests) {
                                 break;
                             }
                             System.out.print("User ID: ");
-                            library.rejectUser(safeIntInput(sc), users, currentUser);
+                            userService.rejectUser(safeIntInput(sc), users, currentUser);
                             break;
 
                         case 8:
-                            boolean hasReq = library.displayPremiumRequests(users);
+                            boolean hasReq = userService.displayPremiumRequests(users);
                             if (!hasReq) break;
                             System.out.print("User ID: ");
-                            library.approvePremium(safeIntInput(sc), users);
+                            userService.approvePremium(safeIntInput(sc), users);
                             break;
 
                         case 9:
-                            library.displayUsers(users);
+                            userService.displayUsers(users);
                             System.out.print("User ID: ");
-                            library.setUserBlock(safeIntInput(sc), true, users, currentUser);
+                            userService.setUserBlock(safeIntInput(sc), true, users, currentUser);
                             break;
 
                         case 10:
-                            boolean isBlocked = library.displayBlockedUsers(users);
+                            boolean isBlocked = userService.displayBlockedUsers(users);
 
                             if (!isBlocked) {
                                 break;
                             }
                             System.out.print("User ID: ");
-                            library.setUserBlock(
+                            userService.setUserBlock(
                                     safeIntInput(sc),
                                     false,
                                     users,
@@ -252,13 +253,13 @@ public class Main {
                             int uid = safeIntInput(sc);
                             System.out.print("New Limit: ");
                             int lim = safeIntInput(sc);
-                            library.updateUserLimit(uid, lim, users, currentUser);
+                            userService.updateUserLimit(uid, lim, users, currentUser);
                             break;
 
                         case 12:
-                            library.displayUsers(users);
+                            userService.displayUsers(users);
                             System.out.print("User ID: ");
-                            library.deleteUser(safeIntInput(sc), users, currentUser);
+                            userService.deleteUser(safeIntInput(sc), users, currentUser);
                             break;
 
                         case 13:

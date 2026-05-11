@@ -5,13 +5,20 @@ import java.util.ArrayList;
 public interface LibraryOperations {
 
     void addBook(Book book, User user);
+
     void displayBooks();
+
     void borrowBook(int id, User user);
+
     void returnBook(int id, User user);
 
-    void updateBook(int id, String title, String author, int quantity, User user);
-    void deleteBook(int id, User user, ArrayList<User> users);
+    void updateBook(int id,
+                    String title,
+                    String author,
+                    int quantity,
+                    User user);
 
-    void approveUser(int userId, ArrayList<User> users, User admin);
-    void rejectUser(int userId, ArrayList<User> users, User admin);
+    void deleteBook(int id,
+                    User user,
+                    ArrayList<User> users);
 }

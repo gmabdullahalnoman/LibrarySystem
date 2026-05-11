@@ -64,3 +64,10 @@
                                  blocked state
                                  Passwords remain hidden
  - Proper Book Object Identity
+ - Transfered From LibraryService to UserService
+   approve/reject user
+   block/unblock
+   premium approval
+   delete user
+   display users
+   request management
