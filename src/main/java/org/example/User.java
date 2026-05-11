@@ -19,8 +19,8 @@ public class User extends Person {
     private int totalBorrowed;
     private int totalReturned;
     private boolean activationRequested;
-    private String username;
-    private String password;
+    private final String username;
+    private final String password;
 
     public User(int userId, String name, String username, String password) {
         super(userId, name);

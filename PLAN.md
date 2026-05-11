@@ -63,3 +63,4 @@
                                  limits
                                  blocked state
                                  Passwords remain hidden
+ - Proper Book Object Identity
