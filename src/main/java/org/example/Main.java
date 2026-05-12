@@ -7,20 +7,25 @@ public class Main {
 
     private static int userIdCounter = 1;
 
-    static void main() {
+    public static void main(String[] args) {
 
         LibraryService library = new LibraryService();
         UserService userService = new UserService();
+        AuthService authService = new AuthService();
+
         ArrayList<User> users = new ArrayList<>();
+
         Scanner sc = new Scanner(System.in);
 
         try {
+
             User currentUser = null;
 
             while (true) {
 
                 // AUTH MENU
                 if (currentUser == null) {
+
                     System.out.println("\n===== Welcome =====");
                     System.out.println("1. Register");
                     System.out.println("2. Login");
@@ -28,73 +33,86 @@ public class Main {
                     System.out.print("Choice: ");
 
                     int auth = safeIntInput(sc);
-                    if (auth == -1) continue;
+
+                    if (auth == -1) {
+                        continue;
+                    }
 
                     switch (auth) {
+
                         case 1:
+
                             System.out.println("1. Student");
                             System.out.println("2. Admin");
                             System.out.print("Choice: ");
 
                             int type = safeIntInput(sc);
-                            if (type == -1) continue;
 
-                            System.out.print("Enter Name: ");
-                            String name = sc.nextLine();
-
-                            System.out.print("Enter Username: ");
-                            String username = sc.nextLine();
-
-                            if (findUserByUsername(users, username) != null) {
-                                System.out.println("Username already exists.");
+                            if (type == -1) {
                                 continue;
                             }
 
-                            System.out.print("Enter Password: ");
-                            String password = sc.nextLine();
+                            System.out.print("Enter Name: ");
+                            String name = sc.nextLine();
 
                             if (name.isEmpty()) {
                                 System.out.println("Name cannot be empty.");
                                 continue;
                             }
 
+                            System.out.print("Enter Username: ");
+                            String username = sc.nextLine();
+
+                            System.out.print("Enter Password: ");
+                            String password = sc.nextLine();
+
                             User newUser;
+
                             if (type == 1) {
-                                newUser = new StudentUser(userIdCounter++, name, username, password);
+
+                                newUser =
+                                        new StudentUser(
+                                                userIdCounter++,
+                                                name,
+                                                username,
+                                                password
+                                        );
+
                             } else if (type == 2) {
-                                newUser = new AdminUser(userIdCounter++, name, username, password);
+
+                                newUser =
+                                        new AdminUser(
+                                                userIdCounter++,
+                                                name,
+                                                username,
+                                                password
+                                        );
+
                             } else {
+
                                 System.out.println("Invalid type.");
                                 continue;
                             }
 
-                            users.add(newUser);
-                            System.out.println("Registered successfully.");
-                            System.out.println("Username: " + newUser.getUsername());
+                            authService.registerUser(users, newUser);
+
                             break;
 
                         case 2:
+
                             System.out.print("Enter Username: ");
                             String loginUsername = sc.nextLine();
 
                             System.out.print("Enter Password: ");
                             String loginPassword = sc.nextLine();
-                            currentUser = findUserByUsername(users, loginUsername);
-                            if (currentUser == null) {
-                                System.out.println("User not found.");
-                                continue;
-                            }
 
-                            if (!currentUser.getPassword().equals(loginPassword)) {
-                                System.out.println("Incorrect password.");
-                                currentUser = null;
-                                continue;
-                            }
-                            if (currentUser == null) {
-                                System.out.println("User not found.");
-                            } else {
-                                System.out.println("Welcome " + currentUser.getName());
-                            }
+                            currentUser =
+                                    authService.loginUser(
+                                            users,
+                                            loginUsername,
+                                            loginPassword
+                                    );
+
                             break;
 
                         case 0:
@@ -103,6 +121,7 @@ public class Main {
                         default:
                             System.out.println("Invalid choice.");
                     }
+
                     continue;
                 }
 
@@ -127,20 +146,33 @@ public class Main {
                     System.out.print("Choice: ");
 
                     int choice = safeIntInput(sc);
-                    if (choice == -1) continue;
+
+                    if (choice == -1) {
+                        continue;
+                    }
 
                     switch (choice) {
 
                         case 1:
+
                             System.out.print("Title: ");
                             String t = sc.nextLine();
+
                             System.out.print("Author: ");
                             String a = sc.nextLine();
+
                             System.out.print("Quantity: ");
                             int q = safeIntInput(sc);
-                            if (q <= 0) break;
 
-                            library.addBook(new Book(t, a, q), currentUser);
+                            if (q <= 0) {
+                                break;
+                            }
+
+                            library.addBook(
+                                    new Book(t, a, q),
+                                    currentUser
+                            );
+
                             break;
 
                         case 2:
@@ -157,8 +189,12 @@ public class Main {
                             library.displayBooks();
 
                             System.out.print("Book ID: ");
+
                             int bid = safeIntInput(sc);
-                            if (bid == -1) break;
+
+                            if (bid == -1) {
+                                break;
+                            }
 
                             System.out.print("New Title: ");
                             String nt = sc.nextLine();
@@ -169,7 +205,14 @@ public class Main {
                             System.out.print("New Qty: ");
                             int nq = safeIntInput(sc);
 
-                            library.updateBook(bid, nt, na, nq, currentUser);
+                            library.updateBook(
+                                    bid,
+                                    nt,
+                                    na,
+                                    nq,
+                                    currentUser
+                            );
+
                             break;
 
                         case 4:
@@ -182,20 +225,29 @@ public class Main {
                             library.displayBooks();
 
                             System.out.print("Enter Book ID: ");
+
                             int delId = safeIntInput(sc);
 
-                            if (delId == -1) break;
+                            if (delId == -1) {
+                                break;
+                            }
 
-                            library.deleteBook(delId, currentUser, users);
+                            library.deleteBook(
+                                    delId,
+                                    currentUser,
+                                    users
+                            );
+
                             break;
 
-                        case 5: // NEW
+                        case 5:
                             userService.displayUsers(users);
                             break;
 
                         case 6:
 
-                            boolean hasRequests = userService.displayActivationRequests(users);
+                            boolean hasRequests =
+                                    userService.displayActivationRequests(users);
 
                             if (!hasRequests) {
                                 break;
@@ -212,54 +264,106 @@ public class Main {
                             break;
 
                         case 7:
-                            hasRequests = userService.displayActivationRequests(users);
+
+                            hasRequests =
+                                    userService.displayActivationRequests(users);
+
                             if (!hasRequests) {
                                 break;
                             }
+
                             System.out.print("User ID: ");
-                            userService.rejectUser(safeIntInput(sc), users, currentUser);
+
+                            userService.rejectUser(
+                                    safeIntInput(sc),
+                                    users,
+                                    currentUser
+                            );
+
                             break;
 
                         case 8:
-                            boolean hasReq = userService.displayPremiumRequests(users);
-                            if (!hasReq) break;
+
+                            boolean hasReq =
+                                    userService.displayPremiumRequests(users);
+
+                            if (!hasReq) {
+                                break;
+                            }
+
                             System.out.print("User ID: ");
-                            userService.approvePremium(safeIntInput(sc), users);
+
+                            userService.approvePremium(
+                                    safeIntInput(sc),
+                                    users
+                            );
+
                             break;
 
                         case 9:
+
                             userService.displayUsers(users);
+
                             System.out.print("User ID: ");
-                            userService.setUserBlock(safeIntInput(sc), true, users, currentUser);
+
+                            userService.setUserBlock(
+                                    safeIntInput(sc),
+                                    true,
+                                    users,
+                                    currentUser
+                            );
+
                             break;
 
                         case 10:
-                            boolean isBlocked = userService.displayBlockedUsers(users);
+
+                            boolean isBlocked =
+                                    userService.displayBlockedUsers(users);
 
                             if (!isBlocked) {
                                 break;
                             }
+
                             System.out.print("User ID: ");
+
                             userService.setUserBlock(
                                     safeIntInput(sc),
                                     false,
                                     users,
                                     currentUser
                             );
+
                             break;
 
                         case 11:
+
                             System.out.print("User ID: ");
                             int uid = safeIntInput(sc);
+
                             System.out.print("New Limit: ");
                             int lim = safeIntInput(sc);
-                            userService.updateUserLimit(uid, lim, users, currentUser);
+
+                            userService.updateUserLimit(
+                                    uid,
+                                    lim,
+                                    users,
+                                    currentUser
+                            );
+
                             break;
 
                         case 12:
+
                             userService.displayUsers(users);
+
                             System.out.print("User ID: ");
-                            userService.deleteUser(safeIntInput(sc), users, currentUser);
+
+                            userService.deleteUser(
+                                    safeIntInput(sc),
+                                    users,
+                                    currentUser
+                            );
+
                             break;
 
                         case 13:
@@ -272,18 +376,33 @@ public class Main {
 
                 } else {
 
-                    // If NOT active → restricted menu
-                    if (currentUser.getStatus() != User.Status.ACTIVE) {
+                    if (currentUser.getStatus()
+                            != User.Status.ACTIVE) {
 
                         System.out.println("\n===== Account Pending =====");
-                        System.out.println("Status: " + currentUser.getStatus());
+                        System.out.println(
+                                "Status: " +
+                                        currentUser.getStatus()
+                        );
 
-                        if (currentUser.getStatus() == User.Status.PENDING) {
+                        if (currentUser.getStatus()
+                                == User.Status.PENDING) {
+
                             if (currentUser.isActivationRequested()) {
-                                System.out.println(">> Activation request pending.");
+
+                                System.out.println(
+                                        ">> Activation request pending."
+                                );
+
                             } else {
-                                System.out.println(">> Send request to activate your account.");
-                                System.out.println("1. Request Activation");
+
+                                System.out.println(
+                                        ">> Send request to activate your account."
+                                );
+
+                                System.out.println(
+                                        "1. Request Activation"
+                                );
                             }
                         }
 
@@ -293,16 +412,25 @@ public class Main {
                         System.out.print("Choice: ");
 
                         int choice = safeIntInput(sc);
-                        if (choice == -1) continue;
+
+                        if (choice == -1) {
+                            continue;
+                        }
 
                         switch (choice) {
 
                             case 1:
-                                if (currentUser.getStatus() == User.Status.PENDING) {
+
+                                if (currentUser.getStatus()
+                                        == User.Status.PENDING) {
+
                                     currentUser.requestActivation();
+
                                 } else {
+
                                     System.out.println("Invalid choice.");
                                 }
+
                                 break;
 
                             case 2:
@@ -322,6 +450,7 @@ public class Main {
 
                         continue;
                     }
+
                     // USER MENU
                     System.out.println("\n===== User Menu =====");
                     System.out.println("1. Display Books");
@@ -334,7 +463,10 @@ public class Main {
                     System.out.print("Choice: ");
 
                     int choice = safeIntInput(sc);
-                    if (choice == -1) continue;
+
+                    if (choice == -1) {
+                        continue;
+                    }
 
                     switch (choice) {
 
@@ -343,13 +475,25 @@ public class Main {
                             break;
 
                         case 2:
+
                             System.out.print("Book ID: ");
-                            library.borrowBook(safeIntInput(sc), currentUser);
+
+                            library.borrowBook(
+                                    safeIntInput(sc),
+                                    currentUser
+                            );
+
                             break;
 
                         case 3:
+
                             System.out.print("Book ID: ");
-                            library.returnBook(safeIntInput(sc), currentUser);
+
+                            library.returnBook(
+                                    safeIntInput(sc),
+                                    currentUser
+                            );
+
                             break;
 
                         case 4:
@@ -376,24 +520,21 @@ public class Main {
     }
 
     private static int safeIntInput(Scanner sc) {
+
         try {
+
             int val = sc.nextInt();
             sc.nextLine();
+
             return val;
+
         } catch (Exception e) {
+
             System.out.println("Invalid input.");
+
             sc.nextLine();
+
             return -1;
         }
-    }
-
-    private static User findUserByUsername(ArrayList<User> users, String username) {
-
-        for (User u : users) {
-            if (u.getUsername().equalsIgnoreCase(username)) {
-                return u;
-            }
-        }
-        return null;
     }
 }

@@ -52,22 +52,24 @@
  - Login Upgrade - Old system: login by ID 
                  - New system: login by username + password
  - Authentication Validation - Implemented: 
-                       incorrect password handling
-                       username existence check
-                       polite error messages
-                       no program crash on invalid input
+                       incorrect password handling,
+                       username existence check,
+                       polite error messages,
+                       no program crash on invalid input,
  - Admin User Visibility Upgrade - Admin can now view:
-                                 usernames
-                                 roles
-                                 statuses
-                                 limits
-                                 blocked state
-                                 Passwords remain hidden
+                                 usernames,
+                                 roles,
+                                 statuses,
+                                 limits,
+                                 blocked state,
+                                 Passwords remain hidden.
  - Proper Book Object Identity
  - Transfered From LibraryService to UserService
-   approve/reject user
-   block/unblock
-   premium approval
-   delete user
-   display users
-   request management
+   approve/reject user,
+   block/unblock,
+   premium approval,
+   delete user,
+   display users,
+   request management.
+ - Service Responsibility Separation Completed
+ - LibraryService, UserService, AuthService
