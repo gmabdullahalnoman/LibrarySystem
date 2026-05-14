@@ -7,7 +7,7 @@ public class Main {
 
     private static int userIdCounter = 1;
 
-    public static void main(String[] args) {
+    static void main() {
 
         LibraryService library = new LibraryService();
         UserService userService = new UserService();

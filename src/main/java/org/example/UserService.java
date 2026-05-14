@@ -140,20 +140,51 @@ public class UserService implements UserOperations {
     @Override
     public void deleteUser(int id, ArrayList<User> users, User admin) {
 
-        User u = findUserById(users, id);
-
-        if (u == null) {
+        if (!(admin instanceof AdminUser)) {
+            System.out.println("Access denied.");
             return;
         }
 
+        User u = findUserById(users, id);
+
+        if (u == null) {
+            System.out.println("User not found.");
+            return;
+        }
+
+        // cannot delete own account
+        if (u == admin) {
+            System.out.println("Admin cannot delete own account.");
+            return;
+        }
+
+        // cannot delete admin accounts
+        if (u instanceof AdminUser) {
+            System.out.println("Admin accounts cannot be deleted.");
+            return;
+        }
+
+        // user currently borrowing books
         if (u.getBorrowedCount() > 0) {
-            System.out.println("User has books.");
+            System.out.println("User has borrowed books.");
+            return;
+        }
+
+        // pending activation request
+        if (u.isActivationRequested()) {
+            System.out.println("User has pending activation request.");
+            return;
+        }
+
+        // pending premium request
+        if (u.isPremiumRequested()) {
+            System.out.println("User has pending premium request.");
             return;
         }
 
         users.remove(u);
 
-        System.out.println("User deleted.");
+        System.out.println("User deleted successfully.");
     }
 
     @Override

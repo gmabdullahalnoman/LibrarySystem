@@ -73,3 +73,6 @@
    request management.
  - Service Responsibility Separation Completed
  - LibraryService, UserService, AuthService
+ - DeleteUser() logics solved
+
+# Will raise new demand soon...(Check NEXT.md)
