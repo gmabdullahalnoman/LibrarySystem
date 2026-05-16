@@ -1,0 +1,285 @@
+package org.example;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class AdminMenuHandler {
+
+    private final LibraryService library;
+    private final UserService userService;
+
+    public AdminMenuHandler(LibraryService library,
+                            UserService userService) {
+
+        this.library = library;
+        this.userService = userService;
+    }
+    public User handleAdminMenu(User currentUser,
+                                ArrayList<User> users,
+                                Scanner sc) {
+
+        System.out.println("\n===== Admin Menu =====");
+        System.out.println("1. Add Book");
+        System.out.println("2. Display Books");
+        System.out.println("3. Update Book");
+        System.out.println("4. Delete Book");
+        System.out.println("5. View All Users");
+        System.out.println("6. Approve User");
+        System.out.println("7. Reject User");
+        System.out.println("8. Approve Premium");
+        System.out.println("9. Block User");
+        System.out.println("10. Unblock User");
+        System.out.println("11. Update User Limit");
+        System.out.println("12. Delete User");
+        System.out.println("13. Logout");
+        System.out.println("0. Exit");
+        System.out.print("Choice: ");
+
+        int choice = InputUtil.safeIntInput(sc);
+
+        if (choice == -1) {
+            return currentUser;
+        }
+        switch (choice) {
+
+            case 1:
+                addBook(currentUser, sc);
+                break;
+
+            case 2:
+                library.displayBooks();
+                break;
+
+            case 3:
+                updateBook(currentUser, sc);
+                break;
+
+            case 4:
+                deleteBook(currentUser, users, sc);
+                break;
+
+            case 5:
+                userService.displayUsers(users);
+                break;
+
+            case 6:
+                approveUser(currentUser, users, sc);
+                break;
+
+            case 7:
+                rejectUser(currentUser, users, sc);
+                break;
+
+            case 8:
+                approvePremium(users, sc);
+                break;
+
+            case 9:
+                blockUser(currentUser, users, sc);
+                break;
+
+            case 10:
+                unblockUser(currentUser, users, sc);
+                break;
+
+            case 11:
+                updateUserLimit(currentUser, users, sc);
+                break;
+
+            case 12:
+                deleteUser(currentUser, users, sc);
+                break;
+
+            case 13:
+                return null;
+
+            case 0:
+                System.exit(0);
+        }
+
+        return currentUser;
+    }
+    private void addBook(User currentUser, Scanner sc) {
+
+        System.out.print("Title: ");
+        String title = sc.nextLine();
+
+        System.out.print("Author: ");
+        String author = sc.nextLine();
+
+        System.out.print("Quantity: ");
+        int quantity = InputUtil.safeIntInput(sc);
+
+        if (quantity <= 0) {
+            System.out.println("Invalid quantity.");
+            return;
+        }
+
+        library.addBook(
+                new Book(title, author, quantity),
+                currentUser
+        );
+    }
+
+
+    private void updateBook(User currentUser, Scanner sc) {
+
+        if (!library.hasBooks()) {
+            System.out.println("No books available.");
+            return;
+        }
+
+        library.displayBooks();
+
+        System.out.print("Book ID: ");
+        int id = InputUtil.safeIntInput(sc);
+
+        System.out.print("New Title: ");
+        String title = sc.nextLine();
+
+        System.out.print("New Author: ");
+        String author = sc.nextLine();
+
+        System.out.print("New Quantity: ");
+        int quantity = InputUtil.safeIntInput(sc);
+
+        library.updateBook(id, title, author, quantity, currentUser);
+    }
+    private void deleteBook(User currentUser,
+                            ArrayList<User> users,
+                            Scanner sc) {
+
+        if (!library.hasBooks()) {
+            System.out.println("No books available.");
+            return;
+        }
+
+        library.displayBooks();
+
+        System.out.print("Book ID: ");
+        int id = InputUtil.safeIntInput(sc);
+
+        library.deleteBook(id, currentUser, users);
+    }
+
+    private void approveUser(User currentUser,
+                             ArrayList<User> users,
+                             Scanner sc) {
+
+        boolean found = userService.displayActivationRequests(users);
+
+        if (!found) {
+            return;
+        }
+
+        System.out.print("User ID: ");
+
+        userService.approveUser(
+                InputUtil.safeIntInput(sc),
+                users,
+                currentUser
+        );
+    }
+    private void rejectUser(User currentUser,
+                            ArrayList<User> users,
+                            Scanner sc) {
+
+        boolean found = userService.displayActivationRequests(users);
+
+        if (!found) {
+            return;
+        }
+
+        System.out.print("User ID: ");
+
+        userService.rejectUser(
+                InputUtil.safeIntInput(sc),
+                users,
+                currentUser
+        );
+    }
+
+    private void approvePremium(ArrayList<User> users,
+                                Scanner sc) {
+
+        boolean found = userService.displayPremiumRequests(users);
+
+        if (!found) {
+            return;
+        }
+
+        System.out.print("User ID: ");
+
+        userService.approvePremium(
+                InputUtil.safeIntInput(sc),
+                users
+        );
+    }
+    private void blockUser(User currentUser,
+                           ArrayList<User> users,
+                           Scanner sc) {
+
+        userService.displayUsers(users);
+
+        System.out.print("User ID: ");
+
+        userService.setUserBlock(
+                InputUtil.safeIntInput(sc),
+                true,
+                users,
+                currentUser
+        );
+    }
+
+    private void unblockUser(User currentUser,
+                             ArrayList<User> users,
+                             Scanner sc) {
+
+        boolean found = userService.displayBlockedUsers(users);
+
+        if (!found) {
+            return;
+        }
+
+        System.out.print("User ID: ");
+
+        userService.setUserBlock(
+                InputUtil.safeIntInput(sc),
+                false,
+                users,
+                currentUser
+        );
+    }
+    private void updateUserLimit(User currentUser,
+                                 ArrayList<User> users,
+                                 Scanner sc) {
+
+        System.out.print("User ID: ");
+        int id = InputUtil.safeIntInput(sc);
+
+        System.out.print("New Limit: ");
+        int limit = InputUtil.safeIntInput(sc);
+
+        userService.updateUserLimit(
+                id,
+                limit,
+                users,
+                currentUser
+        );
+    }
+
+    private void deleteUser(User currentUser,
+                            ArrayList<User> users,
+                            Scanner sc) {
+
+        userService.displayUsers(users);
+
+        System.out.print("User ID: ");
+
+        userService.deleteUser(
+                InputUtil.safeIntInput(sc),
+                users,
+                currentUser
+        );
+    }
+}

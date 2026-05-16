@@ -15,14 +15,15 @@ public class User extends Person {
     private boolean isBlocked;
     private int borrowLimit;
     private boolean premiumRequested;
-    // NEW tracking
+    private boolean activationRequested;
     private int totalBorrowed;
     private int totalReturned;
-    private boolean activationRequested;
     private final String username;
     private final String password;
-
-    public User(int userId, String name, String username, String password) {
+    public User(int userId,
+                String name,
+                String username,
+                String password) {
         super(userId, name);
         this.borrowedBooks = new ArrayList<>();
         this.status = Status.PENDING;
@@ -30,13 +31,13 @@ public class User extends Person {
         this.borrowLimit = 2;
         this.premiumRequested = false;
 
+        this.activationRequested = false;
         this.totalBorrowed = 0;
         this.totalReturned = 0;
-        this.activationRequested = false;
         this.username = username;
         this.password = password;
     }
-
+    // BOOK OPERATIONS
     public void borrowBook(Book book) {
         if (isBlocked) {
             System.out.println("Your account is blocked.");
@@ -59,27 +60,78 @@ public class User extends Person {
         }
 
         borrowedBooks.add(book);
-        totalBorrowed++; // track
+
+        totalBorrowed++;
     }
 
     public void returnBook(Book book) {
         if (borrowedBooks.remove(book)) {
-            totalReturned++; // track
+            totalReturned++;
         }
     }
 
-    public void showBorrowedBooks() {
-        System.out.println("Borrowed: " + borrowedBooks.size() + "/" + borrowLimit);
-        System.out.println("Status: " + status + (isBlocked ? " (Blocked)" : ""));
+    public boolean hasBorrowedBook(Book book) {
 
-        // hints
+        for (Book b : borrowedBooks) {
+
+            if (b.getId() == book.getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public int getBorrowedCount() {
+        return borrowedBooks.size();
+    }
+    // DISPLAY
+
+    public void showBorrowedBooks() {
+
+        System.out.println("\n===== My Account =====");
+
+        System.out.println(
+                "Status: " + status +
+                        (isBlocked ? " (BLOCKED)" : "")
+        );
+
+        System.out.println(
+                "Borrow Limit: " +
+                        borrowedBooks.size() +
+                        "/" +
+                        borrowLimit
+        );
+
+        System.out.println(
+                "Total Borrowed History: " +
+                        totalBorrowed
+        );
+
+        System.out.println(
+                "Total Returned History: " +
+                        totalReturned
+        );
+
         if (status == Status.PENDING && !activationRequested) {
-            System.out.println(">> You can request account activation.");
+
+            System.out.println(
+                    ">> You can request activation."
+            );
+        }
+
+        if (activationRequested) {
+
+            System.out.println(
+                    ">> Activation request pending."
+            );
         }
 
         if (premiumRequested) {
-            System.out.println(">> Premium request pending approval.");
+
+            System.out.println(
+                    ">> Premium request pending."
+            );
         }
+        System.out.println("\n===== Borrowed Books =====");
 
         if (borrowedBooks.isEmpty()) {
             System.out.println("No borrowed books.");
@@ -87,22 +139,19 @@ public class User extends Person {
         }
 
         for (Book book : borrowedBooks) {
-            System.out.println(book.getId() + " | " + book.getTitle() + " by " + book.getAuthor());
+
+            System.out.println(
+                    book.getId() +
+                            " | " +
+                            book.getTitle() +
+                            " by " +
+                            book.getAuthor()
+            );
         }
     }
 
-    public int getBorrowedCount() {
-        return borrowedBooks.size();
-    }
+    // STATUS
 
-    public boolean hasBorrowedBook(Book book) {
-        for (Book b : borrowedBooks) {
-            if (b.getId() == book.getId()) return true;
-        }
-        return false;
-    }
-
-    // Status control
     public Status getStatus() {
         return status;
     }
@@ -117,7 +166,7 @@ public class User extends Person {
         this.activationRequested = false;
     }
 
-    // Block control
+    // BLOCK
     public void setBlocked(boolean blocked) {
         isBlocked = blocked;
     }
@@ -126,7 +175,7 @@ public class User extends Person {
         return isBlocked;
     }
 
-    // Borrow limit
+    // BORROW LIMIT
     public void setBorrowLimit(int limit) {
         this.borrowLimit = limit;
     }
@@ -135,7 +184,7 @@ public class User extends Person {
         return borrowLimit;
     }
 
-    // Premium request (with eligibility)
+    // PREMIUM
     public void requestPremium() {
 
         if (premiumRequested) {
@@ -144,12 +193,19 @@ public class User extends Person {
         }
 
         if (!(totalBorrowed > 0 && totalReturned > 0)) {
-            System.out.println("You must borrow and return at least 1 book before requesting premium.");
+
+            System.out.println(
+                    "Borrow and return at least 1 book first."
+            );
+
             return;
         }
 
         premiumRequested = true;
-        System.out.println("Premium request sent.");
+
+        System.out.println(
+                "Premium request sent."
+        );
     }
 
     public boolean isPremiumRequested() {
@@ -160,29 +216,42 @@ public class User extends Person {
         premiumRequested = false;
     }
 
-    // Activation request
+    // ACTIVATION
     public void requestActivation() {
 
         if (activationRequested) {
-            System.out.println("Activation request already pending.");
+
+            System.out.println(
+                    "Activation request already pending."
+            );
             return;
         }
 
         activationRequested = true;
-        System.out.println("Activation request sent to admin.");
-    }
-    public void clearActivationRequest() {
-        activationRequested = false;
+        System.out.println(
+                "Activation request sent to admin."
+        );
     }
 
     public boolean isActivationRequested() {
         return activationRequested;
     }
+    public void clearActivationRequest() {
+        activationRequested = false;
+    }
+    // AUTH
     public String getUsername() {
         return username;
     }
 
     public String getPassword() {
         return password;
+    }
+    // HISTORY
+    public int getTotalBorrowed() {
+        return totalBorrowed;
+    }
+    public int getTotalReturned() {
+        return totalReturned;
     }
 }

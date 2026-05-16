@@ -8,6 +8,11 @@ public class AuthService implements AuthOperations {
     public void registerUser(ArrayList<User> users,
                              User user) {
 
+        if (user == null) {
+
+            System.out.println("Invalid user.");
+            return;
+        }
         if (usernameExists(users, user.getUsername())) {
             System.out.println("Username already exists.");
             return;
@@ -16,7 +21,11 @@ public class AuthService implements AuthOperations {
         users.add(user);
 
         System.out.println("Registered successfully.");
-        System.out.println("Username: " + user.getUsername());
+
+        System.out.println(
+                "Username: " +
+                        user.getUsername()
+        );
     }
 
     @Override
@@ -24,7 +33,11 @@ public class AuthService implements AuthOperations {
                           String username,
                           String password) {
 
-        User user = findUserByUsername(users, username);
+        User user =
+                findUserByUsername(
+                        users,
+                        username
+                );
 
         if (user == null) {
             System.out.println("User not found.");
@@ -36,7 +49,10 @@ public class AuthService implements AuthOperations {
             return null;
         }
 
-        System.out.println("Welcome " + user.getName());
+        System.out.println(
+                "Welcome " +
+                        user.getName()
+        );
 
         return user;
     }
@@ -45,8 +61,40 @@ public class AuthService implements AuthOperations {
     public boolean usernameExists(ArrayList<User> users,
                                   String username) {
 
-        return findUserByUsername(users, username) != null;
+        return findUserByUsername(
+                users,
+                username
+        ) != null;
     }
+
+    @Override
+    public User createUser(int type,
+                           int id,
+                           String name,
+                           String username,
+                           String password) {
+
+        if (type == 1) {
+
+            return new StudentUser(
+                    id,
+                    name,
+                    username,
+                    password
+            );
+        }
+
+        if (type == 2) {
+            return new AdminUser(
+                    id,
+                    name,
+                    username,
+                    password
+            );
+        }
+        return null;
+    }
+    // PRIVATE HELPERS
 
     private User findUserByUsername(ArrayList<User> users,
                                     String username) {
