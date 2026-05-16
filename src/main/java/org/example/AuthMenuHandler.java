@@ -61,7 +61,7 @@ public class AuthMenuHandler {
         System.out.print("Enter Admin Secret Key: ");
         String secret = sc.nextLine();
 
-        if (!secret.equals("ADMIN123")) {
+        if (!secret.equals("123")) {
             System.out.println("Invalid admin secret key.");
             return;
         }

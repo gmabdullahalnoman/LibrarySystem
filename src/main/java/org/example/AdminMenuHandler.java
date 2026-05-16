@@ -31,7 +31,8 @@ public class AdminMenuHandler {
         System.out.println("10. Unblock User");
         System.out.println("11. Update User Limit");
         System.out.println("12. Delete User");
-        System.out.println("13. Logout");
+        System.out.println("13. View Transactions");
+        System.out.println("14. Logout");
         System.out.println("0. Exit");
         System.out.print("Choice: ");
 
@@ -91,6 +92,10 @@ public class AdminMenuHandler {
                 break;
 
             case 13:
+                library.displayAllTransactions();
+                break;
+
+            case 14:
                 return null;
 
             case 0:

@@ -6,13 +6,20 @@ public class LibraryService implements LibraryOperations {
 
     private ArrayList<Book> books;
 
+    // NEW
+    private ArrayList<Transaction> transactions;
+
     public LibraryService() {
+
         this.books = new ArrayList<>();
+
+        this.transactions = new ArrayList<>();
     }
 
     private Book findBookById(int id) {
 
         for (Book book : books) {
+
             if (book.getId() == id) {
                 return book;
             }
@@ -21,24 +28,65 @@ public class LibraryService implements LibraryOperations {
         return null;
     }
 
+    // NEW
+    private Transaction findActiveTransaction(User user,
+                                              Book book) {
+
+        for (Transaction transaction : transactions) {
+
+            boolean sameUser =
+                    transaction.getUsername()
+                            .equalsIgnoreCase(
+                                    user.getUsername()
+                            );
+
+            boolean sameBook =
+                    transaction.getBookTitle()
+                            .equalsIgnoreCase(
+                                    book.getTitle()
+                            );
+
+            if (sameUser &&
+                    sameBook &&
+                    !transaction.isReturned()) {
+
+                return transaction;
+            }
+        }
+
+        return null;
+    }
+
     @Override
-    public void addBook(Book newBook, User user) {
+    public void addBook(Book newBook,
+                        User user) {
 
         if (!(user instanceof AdminUser)) {
+
             System.out.println("Access denied.");
             return;
         }
 
         for (Book book : books) {
 
-            if (book.getTitle().equalsIgnoreCase(newBook.getTitle()) &&
-                    book.getAuthor().equalsIgnoreCase(newBook.getAuthor())) {
+            if (book.getTitle()
+                    .equalsIgnoreCase(newBook.getTitle())
+                    &&
+                    book.getAuthor()
+                            .equalsIgnoreCase(newBook.getAuthor())) {
 
-                for (int i = 0; i < newBook.getQuantity(); i++) {
+                for (int i = 0;
+                     i < newBook.getQuantity();
+                     i++) {
+
                     book.returnBook();
                 }
 
-                System.out.println("Stock updated: " + book.getQuantity());
+                System.out.println(
+                        "Stock updated: " +
+                                book.getQuantity()
+                );
+
                 return;
             }
         }
@@ -52,6 +100,7 @@ public class LibraryService implements LibraryOperations {
     public void displayBooks() {
 
         if (books.isEmpty()) {
+
             System.out.println("No books.");
             return;
         }
@@ -62,16 +111,19 @@ public class LibraryService implements LibraryOperations {
     }
 
     @Override
-    public void borrowBook(int id, User user) {
+    public void borrowBook(int id,
+                           User user) {
 
         Book book = findBookById(id);
 
         if (book == null) {
+
             System.out.println("Book not found.");
             return;
         }
 
         if (book.getQuantity() <= 0) {
+
             System.out.println("Out of stock.");
             return;
         }
@@ -88,20 +140,34 @@ public class LibraryService implements LibraryOperations {
 
         book.borrowBook();
 
-        System.out.println("Borrowed: " + book.getTitle());
+        // NEW TRANSACTION
+        transactions.add(
+                new Transaction(
+                        user.getUsername(),
+                        book.getTitle()
+                )
+        );
+
+        System.out.println(
+                "Borrowed: " +
+                        book.getTitle()
+        );
     }
 
     @Override
-    public void returnBook(int id, User user) {
+    public void returnBook(int id,
+                           User user) {
 
         Book book = findBookById(id);
 
         if (book == null) {
+
             System.out.println("Book not found.");
             return;
         }
 
         if (!user.hasBorrowedBook(book)) {
+
             System.out.println("Not your book.");
             return;
         }
@@ -110,7 +176,18 @@ public class LibraryService implements LibraryOperations {
 
         book.returnBook();
 
-        System.out.println("Returned: " + book.getTitle());
+        // UPDATE TRANSACTION
+        Transaction transaction =
+                findActiveTransaction(user, book);
+
+        if (transaction != null) {
+            transaction.markReturned();
+        }
+
+        System.out.println(
+                "Returned: " +
+                        book.getTitle()
+        );
     }
 
     @Override
@@ -121,6 +198,7 @@ public class LibraryService implements LibraryOperations {
                            User user) {
 
         if (!(user instanceof AdminUser)) {
+
             System.out.println("Access denied.");
             return;
         }
@@ -128,6 +206,7 @@ public class LibraryService implements LibraryOperations {
         Book book = findBookById(id);
 
         if (book == null) {
+
             System.out.println("Book not found.");
             return;
         }
@@ -153,6 +232,7 @@ public class LibraryService implements LibraryOperations {
                            ArrayList<User> users) {
 
         if (!(user instanceof AdminUser)) {
+
             System.out.println("Access denied.");
             return;
         }
@@ -160,11 +240,13 @@ public class LibraryService implements LibraryOperations {
         Book book = findBookById(id);
 
         if (book == null) {
+
             System.out.println("Book not found.");
             return;
         }
 
         if (book.getQuantity() > 0) {
+
             System.out.println("Stock not zero.");
             return;
         }
@@ -172,6 +254,7 @@ public class LibraryService implements LibraryOperations {
         for (User u : users) {
 
             if (u.hasBorrowedBook(book)) {
+
                 System.out.println("Book is borrowed.");
                 return;
             }
@@ -180,6 +263,57 @@ public class LibraryService implements LibraryOperations {
         books.remove(book);
 
         System.out.println("Book deleted.");
+    }
+
+    // NEW
+    public void displayAllTransactions() {
+
+        System.out.println(
+                "\n===== All Transactions ====="
+        );
+
+        if (transactions.isEmpty()) {
+
+            System.out.println(
+                    "No transaction history."
+            );
+
+            return;
+        }
+
+        for (Transaction transaction : transactions) {
+            System.out.println(transaction);
+        }
+    }
+
+    // NEW
+    public void displayUserTransactions(User user) {
+
+        System.out.println(
+                "\n===== My Transaction History ====="
+        );
+
+        boolean found = false;
+
+        for (Transaction transaction : transactions) {
+
+            if (transaction.getUsername()
+                    .equalsIgnoreCase(
+                            user.getUsername()
+                    )) {
+
+                System.out.println(transaction);
+
+                found = true;
+            }
+        }
+
+        if (!found) {
+
+            System.out.println(
+                    "No transaction history."
+            );
+        }
     }
 
     public boolean hasBooks() {

@@ -22,7 +22,8 @@ public class UserMenuHandler {
         System.out.println("3. Return Book");
         System.out.println("4. My Books");
         System.out.println("5. Request Premium");
-        System.out.println("6. Logout");
+        System.out.println("6. Transaction History");
+        System.out.println("7. Logout");
         System.out.println("0. Exit");
         System.out.print("Choice: ");
 
@@ -63,6 +64,10 @@ public class UserMenuHandler {
                 break;
 
             case 6:
+                library.displayUserTransactions(currentUser);
+                break;
+
+            case 7:
                 return null;
 
             case 0:
