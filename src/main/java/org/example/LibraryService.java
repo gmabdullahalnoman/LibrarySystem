@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.exception.*;
 import java.util.ArrayList;
 
 public class LibraryService implements LibraryOperations {
@@ -63,8 +64,9 @@ public class LibraryService implements LibraryOperations {
 
         if (!(user instanceof AdminUser)) {
 
-            System.out.println("Access denied.");
-            return;
+            throw new AccessDeniedException(
+                    "Access denied."
+            );
         }
 
         for (Book book : books) {
@@ -118,14 +120,16 @@ public class LibraryService implements LibraryOperations {
 
         if (book == null) {
 
-            System.out.println("Book not found.");
-            return;
+            throw new BookNotFoundException(
+                    "Book not found."
+            );
         }
 
         if (book.getQuantity() <= 0) {
 
-            System.out.println("Out of stock.");
-            return;
+            throw new InvalidOperationException(
+                    "Out of stock."
+            );
         }
 
         int before = user.getBorrowedCount();

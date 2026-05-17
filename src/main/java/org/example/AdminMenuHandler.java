@@ -48,7 +48,14 @@ public class AdminMenuHandler {
                 break;
 
             case 2:
-                library.displayBooks();
+                try {
+
+                    library.displayBooks();
+
+                } catch (RuntimeException e) {
+
+                    System.out.println(e.getMessage());
+                }
                 break;
 
             case 3:
