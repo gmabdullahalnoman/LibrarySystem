@@ -1,4 +1,7 @@
 package org.example;
+import org.example.exception.BookNotFoundException;
+import org.example.exception.InvalidOperationException;
+
 import java.util.Scanner;
 
 public class UserMenuHandler {
@@ -41,10 +44,20 @@ public class UserMenuHandler {
 
             case 2:
                 System.out.print("Book ID: ");
-                library.borrowBook(
-                        InputUtil.safeIntInput(sc),
-                        currentUser
-                );
+
+                try {
+
+                    library.borrowBook(
+                            InputUtil.safeIntInput(sc),
+                            currentUser
+                    );
+
+                } catch (BookNotFoundException |
+                         InvalidOperationException e) {
+
+                    System.out.println(e.getMessage());
+                }
+
                 break;
 
             case 3:

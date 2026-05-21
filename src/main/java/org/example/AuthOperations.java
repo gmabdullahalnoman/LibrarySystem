@@ -14,7 +14,7 @@ public interface AuthOperations {
     boolean usernameExists(ArrayList<User> users,
                            String username);
 
-    User createUser(int type,
+    User createUser(UserType type,
                     int id,
                     String name,
                     String username,

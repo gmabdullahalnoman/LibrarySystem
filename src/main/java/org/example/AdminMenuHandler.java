@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.exception.AccessDeniedException;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -127,10 +129,17 @@ public class AdminMenuHandler {
             return;
         }
 
-        library.addBook(
-                new Book(title, author, quantity),
-                currentUser
-        );
+        try {
+
+            library.addBook(
+                    new Book(title, author, quantity),
+                    currentUser
+            );
+
+        } catch (AccessDeniedException e) {
+
+            System.out.println(e.getMessage());
+        }
     }
 
 
@@ -171,7 +180,14 @@ public class AdminMenuHandler {
         System.out.print("Book ID: ");
         int id = InputUtil.safeIntInput(sc);
 
-        library.deleteBook(id, currentUser, users);
+        try {
+
+            library.deleteBook(id, currentUser, users);
+
+        } catch (AccessDeniedException e) {
+
+            System.out.println(e.getMessage());
+        }
     }
 
     private void approveUser(User currentUser,

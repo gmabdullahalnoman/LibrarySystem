@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.exception.AuthenticationException;
 import java.util.ArrayList;
 
 public class AuthService implements AuthOperations {
@@ -33,26 +34,17 @@ public class AuthService implements AuthOperations {
                           String username,
                           String password) {
 
-        User user =
-                findUserByUsername(
-                        users,
-                        username
-                );
+        User user = findUserByUsername(users, username);
 
         if (user == null) {
-            System.out.println("User not found.");
-            return null;
+            throw new AuthenticationException("User not found.");
         }
 
         if (!user.getPassword().equals(password)) {
-            System.out.println("Incorrect password.");
-            return null;
+            throw new AuthenticationException("Incorrect password.");
         }
 
-        System.out.println(
-                "Welcome " +
-                        user.getName()
-        );
+        System.out.println("Welcome " + user.getName());
 
         return user;
     }
@@ -68,31 +60,28 @@ public class AuthService implements AuthOperations {
     }
 
     @Override
-    public User createUser(int type,
+    public User createUser(UserType type,
                            int id,
                            String name,
                            String username,
                            String password) {
 
-        if (type == 1) {
+        return switch (type) {
 
-            return new StudentUser(
+            case STUDENT -> new StudentUser(
                     id,
                     name,
                     username,
                     password
             );
-        }
 
-        if (type == 2) {
-            return new AdminUser(
+            case ADMIN -> new AdminUser(
                     id,
                     name,
                     username,
                     password
             );
-        }
-        return null;
+        };
     }
     // PRIVATE HELPERS
 

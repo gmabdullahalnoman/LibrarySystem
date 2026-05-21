@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.exception.AuthenticationException;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -80,7 +82,14 @@ public class AuthMenuHandler {
         System.out.print("Enter Password: ");
         String password = sc.nextLine();
 
-        return authService.loginUser(users, username, password);
+        try {
+            return authService.loginUser(users, username, password);
+
+        } catch (AuthenticationException e) {
+
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
     private User createUser(boolean isAdmin, Scanner sc) {
 
