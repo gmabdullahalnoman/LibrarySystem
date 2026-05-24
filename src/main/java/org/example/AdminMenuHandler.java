@@ -19,7 +19,7 @@ public class AdminMenuHandler {
     public User handleAdminMenu(User currentUser,
                                 ArrayList<User> users,
                                 Scanner sc) {
-
+/*
         System.out.println("\n===== Admin Menu =====");
         System.out.println("1. Add Book");
         System.out.println("2. Display Books");
@@ -37,7 +37,36 @@ public class AdminMenuHandler {
         System.out.println("14. Logout");
         System.out.println("0. Exit");
         System.out.print("Choice: ");
+*/
+        //New menu designed
+        System.out.println("========== Admin Menu ==========");
 
+        System.out.printf("%-30s %-30s %-30s%n",
+                "1. Add Book",
+                "2. Display Books",
+                "3. Update Book");
+
+        System.out.printf("%-30s %-30s %-30s%n",
+                "4. Delete Book",
+                "5. View All Users",
+                "6. Approve User");
+
+        System.out.printf("%-30s %-30s %-30s%n",
+                "7. Reject User",
+                "8. Approve Premium",
+                "9. Block User");
+
+        System.out.printf("%-30s %-30s %-30s%n",
+                "10. Unblock User",
+                "11. Update User Limit",
+                "12. Delete User");
+
+        System.out.printf("%-30s %-30s %-30s%n",
+                "13. View Transactions",
+                "14. Logout",
+                "0. Exit");
+
+        System.out.println("Choice: ");
         int choice = InputUtil.safeIntInput(sc);
 
         if (choice == -1) {

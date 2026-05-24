@@ -139,7 +139,10 @@ public class LibraryService implements LibraryOperations {
         int after = user.getBorrowedCount();
 
         if (before == after) {
-            return;
+
+            throw new InvalidOperationException(
+                    "Borrow limit reached."
+            );
         }
 
         book.borrowBook();
@@ -236,9 +239,7 @@ public class LibraryService implements LibraryOperations {
                            ArrayList<User> users) {
 
         if (!(user instanceof AdminUser)) {
-
-            System.out.println("Access denied.");
-            return;
+            throw  new AccessDeniedException("Access denied.");
         }
 
         Book book = findBookById(id);

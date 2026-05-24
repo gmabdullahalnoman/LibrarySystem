@@ -18,7 +18,7 @@ public class UserMenuHandler {
         if (currentUser.getStatus() != User.Status.ACTIVE) {
             return handlePendingMenu(currentUser, sc);
         }
-
+/*
         System.out.println("\n===== User Menu =====");
         System.out.println("1. Display Books");
         System.out.println("2. Borrow Book");
@@ -29,7 +29,26 @@ public class UserMenuHandler {
         System.out.println("7. Logout");
         System.out.println("0. Exit");
         System.out.print("Choice: ");
+*/
+        //new menu format
+        System.out.println("===== User Menu =====");
 
+        System.out.printf("%-25s %-25s %-25s%n",
+                "1. Display Books",
+                "2. Borrow Book",
+                "3. Return Book");
+
+        System.out.printf("%-25s %-25s %-25s%n",
+                "4. My Books",
+                "5. Request Premium",
+                "6. Transaction History");
+
+        System.out.printf("%-25s %-25s %-25s%n",
+                "7. Logout",
+                "0. Exit",
+                "");
+
+        System.out.print("Choice: ");
         int choice = InputUtil.safeIntInput(sc);
 
         if (choice == -1) {
@@ -100,7 +119,7 @@ public class UserMenuHandler {
 
             if (currentUser.isActivationRequested()) {
 
-                System.out.println(">> Activation request pending.");
+                System.out.println(">> Activation request sent & pending.");
 
             } else {
 

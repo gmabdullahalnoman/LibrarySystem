@@ -15,14 +15,26 @@ public class AuthMenuHandler {
         this.userIdCounter = 1;
     }
     public User handleAuthMenu(ArrayList<User> users, Scanner sc) {
-
+/*
         System.out.println("\n===== Welcome =====");
         System.out.println("1. Register Student");
         System.out.println("2. Register Admin");
         System.out.println("3. Login");
         System.out.println("0. Exit");
         System.out.print("Choice: ");
+*/
+        // new menu format
+        System.out.println("===== Welcome =====");
 
+        System.out.printf("%-25s %-25s%n",
+                "1. Register Student",
+                "2. Register Admin");
+
+        System.out.printf("%-25s %-25s%n",
+                "3. Login",
+                "0. Exit");
+
+        System.out.print("Choice: ");
         int choice = InputUtil.safeIntInput(sc);
 
         if (choice == -1) {
