@@ -249,10 +249,16 @@ public class AdminMenuHandler {
 
         System.out.print("User ID: ");
 
+        int userId = InputUtil.safeIntInput(sc);
+
+        System.out.print("Rejection reason: ");
+        String reason = sc.nextLine();
+
         userService.rejectUser(
-                InputUtil.safeIntInput(sc),
+                userId,
                 users,
-                currentUser
+                currentUser,
+                reason
         );
     }
 

@@ -6,7 +6,10 @@ public interface UserOperations {
 
     void approveUser(int userId, ArrayList<User> users, User admin);
 
-    void rejectUser(int userId, ArrayList<User> users, User admin);
+    void rejectUser(int userId,
+                    ArrayList<User> users,
+                    User admin,
+                    String reason);
 
     void approvePremium(int id, ArrayList<User> users);
 

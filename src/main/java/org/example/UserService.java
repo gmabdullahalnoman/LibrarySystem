@@ -41,19 +41,29 @@ public class UserService implements UserOperations {
     }
 
     @Override
-    public void rejectUser(int userId, ArrayList<User> users, User admin) {
+    public void rejectUser(int userId,
+                           ArrayList<User> users,
+                           User admin,
+                           String reason) {
 
         if (!(admin instanceof AdminUser)) {
+            System.out.println("Access denied.");
             return;
         }
 
-        User u = findUserById(users, userId);
+        User user = findUserById(users, userId);
 
-        if (u == null) {
+        if (user == null) {
+            System.out.println("User not found.");
             return;
         }
 
-        u.reject();
+        if (!user.isActivationRequested()) {
+            System.out.println("User did not request activation.");
+            return;
+        }
+
+        user.reject(reason);
 
         System.out.println("User rejected.");
     }

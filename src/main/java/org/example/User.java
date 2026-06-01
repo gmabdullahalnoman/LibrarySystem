@@ -16,6 +16,7 @@ public class User extends Person {
     private int borrowLimit;
     private boolean premiumRequested;
     private boolean activationRequested;
+    private String rejectionReason;
     private int totalBorrowed;
     private int totalReturned;
     private final String username;
@@ -32,6 +33,7 @@ public class User extends Person {
         this.premiumRequested = false;
 
         this.activationRequested = false;
+        this.rejectionReason = "";
         this.totalBorrowed = 0;
         this.totalReturned = 0;
         this.username = username;
@@ -117,6 +119,13 @@ public class User extends Person {
                     ">> You can request activation."
             );
         }
+        if (status == Status.REJECTED) {
+
+            System.out.println(
+                    "Rejection Reason: " +
+                            rejectionReason
+            );
+        }
 
         if (activationRequested) {
 
@@ -157,13 +166,30 @@ public class User extends Person {
     }
 
     public void approve() {
+
         this.status = Status.ACTIVE;
         this.activationRequested = false;
+        this.rejectionReason = "";
     }
 
-    public void reject() {
+    public void reject(String reason) {
+
         this.status = Status.REJECTED;
         this.activationRequested = false;
+        this.rejectionReason = reason;
+    }
+    public void resubmitActivationRequest() {
+
+        if (status != Status.REJECTED) {
+            System.out.println("Account is not rejected.");
+            return;
+        }
+
+        status = Status.PENDING;
+        activationRequested = true;
+        rejectionReason = "";
+
+        System.out.println("Activation request resubmitted.");
     }
 
     // BLOCK
@@ -231,6 +257,9 @@ public class User extends Person {
         System.out.println(
                 "Activation request sent to admin."
         );
+    }
+    public String getRejectionReason() {
+        return rejectionReason;
     }
 
     public boolean isActivationRequested() {

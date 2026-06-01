@@ -111,6 +111,42 @@ public class UserMenuHandler {
 
     private User handlePendingMenu(User currentUser,
                                    Scanner sc) {
+        if (currentUser.getStatus() == User.Status.REJECTED) {
+
+            System.out.println("\n===== Account Rejected =====");
+
+            System.out.println(
+                    "Reason: " +
+                            currentUser.getRejectionReason()
+            );
+
+            System.out.println("1. Resubmit Activation Request");
+            System.out.println("2. View My Status");
+            System.out.println("3. Logout");
+            System.out.println("0. Exit");
+            System.out.print("Choice: ");
+
+            int choice = InputUtil.safeIntInput(sc);
+
+            switch (choice) {
+
+                case 1:
+                    currentUser.resubmitActivationRequest();
+                    break;
+
+                case 2:
+                    currentUser.showBorrowedBooks();
+                    break;
+
+                case 3:
+                    return null;
+
+                case 0:
+                    System.exit(0);
+            }
+
+            return currentUser;
+        }
 
         System.out.println("\n===== Account Pending =====");
         System.out.println("Status: " + currentUser.getStatus());
