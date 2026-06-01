@@ -49,22 +49,22 @@ public class AdminMenuHandler {
         System.out.printf("%-30s %-30s %-30s%n",
                 "4. Delete Book",
                 "5. View All Users",
-                "6. Approve User");
+                "6. Manage Activations");
 
         System.out.printf("%-30s %-30s %-30s%n",
-                "7. Reject User",
-                "8. Approve Premium",
-                "9. Block User");
+                "7. Approve Premium",
+                "8. Block User",
+                "9. Unblock User");
 
         System.out.printf("%-30s %-30s %-30s%n",
-                "10. Unblock User",
-                "11. Update User Limit",
-                "12. Delete User");
+                "10. Update User Limit",
+                "11. Delete User",
+                "12. View Transactions");
 
         System.out.printf("%-30s %-30s %-30s%n",
-                "13. View Transactions",
-                "14. Logout",
-                "0. Exit");
+                "13. Logout",
+                "0. Exit",
+                "");
 
         System.out.println("Choice: ");
         int choice = InputUtil.safeIntInput(sc);
@@ -102,38 +102,34 @@ public class AdminMenuHandler {
                 break;
 
             case 6:
-                approveUser(currentUser, users, sc);
+                manageActivationRequests(currentUser, users, sc);
                 break;
 
             case 7:
-                rejectUser(currentUser, users, sc);
-                break;
-
-            case 8:
                 approvePremium(users, sc);
                 break;
 
-            case 9:
+            case 8:
                 blockUser(currentUser, users, sc);
                 break;
 
-            case 10:
+            case 9:
                 unblockUser(currentUser, users, sc);
                 break;
 
-            case 11:
+            case 10:
                 updateUserLimit(currentUser, users, sc);
                 break;
 
-            case 12:
+            case 11:
                 deleteUser(currentUser, users, sc);
                 break;
 
-            case 13:
+            case 12:
                 library.displayAllTransactions();
                 break;
 
-            case 14:
+            case 13:
                 return null;
 
             case 0:
@@ -216,6 +212,65 @@ public class AdminMenuHandler {
         } catch (AccessDeniedException e) {
 
             System.out.println(e.getMessage());
+        }
+    }
+    private void manageActivationRequests(User currentUser,
+                                          ArrayList<User> users,
+                                          Scanner sc) {
+
+        boolean found =
+                userService.displayActivationRequests(users);
+
+        if (!found) {
+            return;
+        }
+
+        System.out.print("User ID: ");
+
+        int userId =
+                InputUtil.safeIntInput(sc);
+
+        System.out.println("1. Approve");
+        System.out.println("2. Reject");
+        System.out.print("Action: ");
+
+        int action =
+                InputUtil.safeIntInput(sc);
+
+        switch (action) {
+
+            case 1:
+
+                userService.approveUser(
+                        userId,
+                        users,
+                        currentUser
+                );
+
+                break;
+
+            case 2:
+
+                System.out.print(
+                        "Rejection reason: "
+                );
+
+                String reason =
+                        sc.nextLine();
+
+                userService.rejectUser(
+                        userId,
+                        users,
+                        currentUser,
+                        reason
+                );
+
+                break;
+
+            default:
+                System.out.println(
+                        "Invalid action."
+                );
         }
     }
 
