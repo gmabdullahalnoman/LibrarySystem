@@ -15,8 +15,13 @@ public interface LibraryOperations {
     void updateBook(int id,
                     String title,
                     String author,
-                    int quantity,
                     User user);
+
+    void adjustStock(int id,
+                     int amount,
+                     boolean addStock,
+                     String reason,
+                     User user);
 
     void deleteBook(int id,
                     User user,

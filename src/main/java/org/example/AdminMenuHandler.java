@@ -44,7 +44,7 @@ public class AdminMenuHandler {
         System.out.printf("%-30s %-30s %-30s%n",
                 "1. Add Book",
                 "2. Display Books",
-                "3. Update Book");
+                "3. Update Book Info & Stock");
 
         System.out.printf("%-30s %-30s %-30s%n",
                 "4. Delete Book",
@@ -168,7 +168,8 @@ public class AdminMenuHandler {
     }
 
 
-    private void updateBook(User currentUser, Scanner sc) {
+    private void updateBook(User currentUser,
+                            Scanner sc) {
 
         if (!library.hasBooks()) {
             System.out.println("No books available.");
@@ -186,10 +187,28 @@ public class AdminMenuHandler {
         System.out.print("New Author: ");
         String author = sc.nextLine();
 
-        System.out.print("New Quantity: ");
-        int quantity = InputUtil.safeIntInput(sc);
+        library.updateBook(
+                id,
+                title,
+                author,
+                currentUser
+        );
 
-        library.updateBook(id, title, author, quantity, currentUser);
+        System.out.println();
+        System.out.println("Adjust stock?");
+        System.out.println("1. Yes");
+        System.out.println("2. No");
+        System.out.print("Choice: ");
+
+        int choice =
+                InputUtil.safeIntInput(sc);
+
+        if (choice == 1) {
+            adjustBookStock(
+                    currentUser,
+                    sc
+            );
+        }
     }
     private void deleteBook(User currentUser,
                             ArrayList<User> users,
@@ -274,49 +293,6 @@ public class AdminMenuHandler {
         }
     }
 
-    private void approveUser(User currentUser,
-                             ArrayList<User> users,
-                             Scanner sc) {
-
-        boolean found = userService.displayActivationRequests(users);
-
-        if (!found) {
-            return;
-        }
-
-        System.out.print("User ID: ");
-
-        userService.approveUser(
-                InputUtil.safeIntInput(sc),
-                users,
-                currentUser
-        );
-    }
-    private void rejectUser(User currentUser,
-                            ArrayList<User> users,
-                            Scanner sc) {
-
-        boolean found = userService.displayActivationRequests(users);
-
-        if (!found) {
-            return;
-        }
-
-        System.out.print("User ID: ");
-
-        int userId = InputUtil.safeIntInput(sc);
-
-        System.out.print("Rejection reason: ");
-        String reason = sc.nextLine();
-
-        userService.rejectUser(
-                userId,
-                users,
-                currentUser,
-                reason
-        );
-    }
-
     private void approvePremium(ArrayList<User> users,
                                 Scanner sc) {
 
@@ -397,6 +373,46 @@ public class AdminMenuHandler {
         userService.deleteUser(
                 InputUtil.safeIntInput(sc),
                 users,
+                currentUser
+        );
+    }
+    private void adjustBookStock(User currentUser,
+                                 Scanner sc) {
+
+        if (!library.hasBooks()) {
+            System.out.println("No books available.");
+            return;
+        }
+
+        library.displayBooks();
+
+        System.out.print("Book ID: ");
+
+        int id =
+                InputUtil.safeIntInput(sc);
+
+        System.out.println("1. Add Stock");
+        System.out.println("2. Remove Stock");
+        System.out.print("Choice: ");
+
+        int action =
+                InputUtil.safeIntInput(sc);
+
+        System.out.print("Amount: ");
+
+        int amount =
+                InputUtil.safeIntInput(sc);
+
+        System.out.print("Reason: ");
+
+        String reason =
+                sc.nextLine();
+
+        library.adjustStock(
+                id,
+                amount,
+                action == 1,
+                reason,
                 currentUser
         );
     }

@@ -201,11 +201,9 @@ public class LibraryService implements LibraryOperations {
     public void updateBook(int id,
                            String title,
                            String author,
-                           int quantity,
                            User user) {
 
         if (!(user instanceof AdminUser)) {
-
             System.out.println("Access denied.");
             return;
         }
@@ -213,7 +211,6 @@ public class LibraryService implements LibraryOperations {
         Book book = findBookById(id);
 
         if (book == null) {
-
             System.out.println("Book not found.");
             return;
         }
@@ -226,11 +223,73 @@ public class LibraryService implements LibraryOperations {
             book.setAuthor(author);
         }
 
-        if (quantity >= 0) {
-            book.setQuantity(quantity);
+        System.out.println("Book details updated.");
+    }
+    @Override
+    public void adjustStock(int id,
+                            int amount,
+                            boolean addStock,
+                            String reason,
+                            User user) {
+
+        if (!(user instanceof AdminUser)) {
+            System.out.println("Access denied.");
+            return;
         }
 
-        System.out.println("Updated.");
+        Book book = findBookById(id);
+
+        if (book == null) {
+            System.out.println("Book not found.");
+            return;
+        }
+
+        if (amount <= 0) {
+            System.out.println("Invalid amount.");
+            return;
+        }
+
+        if (!addStock && amount > book.getQuantity()) {
+            System.out.println("Cannot remove more than available stock.");
+            return;
+        }
+
+        if (addStock) {
+
+            book.setQuantity(
+                    book.getQuantity() + amount
+            );
+
+        } else {
+
+            book.setQuantity(
+                    book.getQuantity() - amount
+            );
+        }
+
+        System.out.println("\n===== Stock Adjustment =====");
+
+        System.out.println(
+                "Book: " + book.getTitle()
+        );
+
+        System.out.println(
+                "Action: " +
+                        (addStock ? "ADD" : "REMOVE")
+        );
+
+        System.out.println(
+                "Amount: " + amount
+        );
+
+        System.out.println(
+                "Reason: " + reason
+        );
+
+        System.out.println(
+                "New Stock: " +
+                        book.getQuantity()
+        );
     }
 
     @Override
