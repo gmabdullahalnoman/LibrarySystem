@@ -1,24 +1,25 @@
 package org.example;
 
+import org.example.exception.InvalidIntInputException;
+
 import java.util.Scanner;
 
 public class InputUtil {
 
     public static int safeIntInput(Scanner sc) {
 
-        try {
+        while (true) {
+            try {
+                int value = sc.nextInt();
+                sc.nextLine(); // buffer clear
+                return value;  // valid input → exit loop
 
-            int value = sc.nextInt();
-            sc.nextLine();
+            } catch (Exception e) {
 
-            return value;
+                sc.nextLine(); // wrong input clear
 
-        } catch (Exception e) {
-
-            System.out.println("Invalid input.");
-            sc.nextLine();
-
-            return -1;
+                System.out.print("Invalid input! Please enter a valid integer: ");
+            }
         }
     }
 }
