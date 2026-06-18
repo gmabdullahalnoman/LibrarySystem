@@ -1,6 +1,12 @@
-package org.example;
+package org.example.service;
 
+import org.example.model.AdminUser;
+import org.example.model.Book;
+import org.example.model.Transaction;
+import org.example.model.User;
 import org.example.exception.*;
+import org.example.interfaces.LibraryOperations;
+
 import java.util.ArrayList;
 
 public class LibraryService implements LibraryOperations {

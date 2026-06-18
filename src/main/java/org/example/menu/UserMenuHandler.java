@@ -1,6 +1,9 @@
-package org.example;
+package org.example.menu;
+import org.example.service.LibraryService;
+import org.example.model.User;
 import org.example.exception.BookNotFoundException;
 import org.example.exception.InvalidOperationException;
+import org.example.util.InputUtil;
 
 import java.util.Scanner;
 

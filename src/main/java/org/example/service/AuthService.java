@@ -1,6 +1,12 @@
-package org.example;
+package org.example.service;
 
+import org.example.model.AdminUser;
+import org.example.model.StudentUser;
+import org.example.model.User;
+import org.example.enums.UserType;
 import org.example.exception.AuthenticationException;
+import org.example.interfaces.AuthOperations;
+
 import java.util.ArrayList;
 
 public class AuthService implements AuthOperations {

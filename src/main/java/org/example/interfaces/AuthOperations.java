@@ -1,4 +1,7 @@
-package org.example;
+package org.example.interfaces;
+
+import org.example.model.User;
+import org.example.enums.UserType;
 
 import java.util.ArrayList;
 

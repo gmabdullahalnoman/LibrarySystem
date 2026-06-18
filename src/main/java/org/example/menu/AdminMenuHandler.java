@@ -1,6 +1,11 @@
-package org.example;
+package org.example.menu;
 
+import org.example.model.Book;
+import org.example.service.LibraryService;
+import org.example.model.User;
+import org.example.service.UserService;
 import org.example.exception.AccessDeniedException;
+import org.example.util.InputUtil;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -66,7 +71,7 @@ public class AdminMenuHandler {
                 "0. Exit",
                 "");
 
-        System.out.println("Choice: ");
+        System.out.print("Choice: ");
         int choice = InputUtil.safeIntInput(sc);
 
         if (choice == -1) {

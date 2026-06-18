@@ -1,4 +1,8 @@
-package org.example;
+package org.example.service;
+
+import org.example.model.AdminUser;
+import org.example.model.User;
+import org.example.interfaces.UserOperations;
 
 import java.util.ArrayList;
 

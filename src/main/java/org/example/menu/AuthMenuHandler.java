@@ -1,6 +1,11 @@
-package org.example;
+package org.example.menu;
 
+import org.example.model.AdminUser;
+import org.example.service.AuthService;
+import org.example.model.StudentUser;
+import org.example.model.User;
 import org.example.exception.AuthenticationException;
+import org.example.util.InputUtil;
 
 import java.util.ArrayList;
 import java.util.Scanner;

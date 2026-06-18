@@ -1,6 +1,4 @@
-package org.example;
-
-import org.example.exception.InvalidIntInputException;
+package org.example.util;
 
 import java.util.Scanner;
 

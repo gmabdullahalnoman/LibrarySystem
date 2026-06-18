@@ -1,5 +1,14 @@
 package org.example;
 
+import org.example.menu.AdminMenuHandler;
+import org.example.menu.AuthMenuHandler;
+import org.example.menu.UserMenuHandler;
+import org.example.model.AdminUser;
+import org.example.model.User;
+import org.example.service.AuthService;
+import org.example.service.LibraryService;
+import org.example.service.UserService;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
