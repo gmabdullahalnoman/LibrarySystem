@@ -108,21 +108,137 @@ public class AuthMenuHandler {
             return null;
         }
     }
-    private User createUser(boolean isAdmin, Scanner sc) {
+    private User createUser(boolean isAdmin,
+                            Scanner sc) {
 
-        System.out.print("Enter Name: ");
-        String name = sc.nextLine();
+        String name;
 
-        if (name.isEmpty()) {
-            System.out.println("Name cannot be empty.");
-            return null;
+        while (true) {
+
+            System.out.print("Enter Name: ");
+            name = sc.nextLine().trim();
+
+            if (!name.matches("[A-Za-z ]+")) {
+
+                System.out.println(
+                        "Name can contain only letters and spaces."
+                );
+
+                continue;
+            }
+
+            String[] parts = name.split("\\s+");
+
+            StringBuilder builder =
+                    new StringBuilder();
+
+            for (String part : parts) {
+
+                builder.append(
+                        Character.toUpperCase(
+                                part.charAt(0)
+                        )
+                );
+
+                builder.append(
+                        part.substring(1)
+                                .toLowerCase()
+                );
+
+                builder.append(" ");
+            }
+
+            name = builder.toString().trim();
+
+            break;
+        }
+        String username;
+
+        while (true) {
+
+            System.out.print("Enter Username: ");
+
+            username =
+                    sc.nextLine().trim();
+
+            if (username.length() < 4) {
+
+                System.out.println(
+                        "Username must be at least 4 characters."
+                );
+
+                continue;
+            }
+
+            if (!username.matches("[A-Za-z0-9_]+")) {
+
+                System.out.println(
+                        "Username can contain only letters, digits and underscore."
+                );
+
+                continue;
+            }
+
+            if (username.matches("\\d+")) {
+
+                System.out.println(
+                        "Username cannot be only numbers."
+                );
+
+                continue;
+            }
+
+            break;
         }
 
-        System.out.print("Enter Username: ");
-        String username = sc.nextLine();
 
-        System.out.print("Enter Password: ");
-        String password = sc.nextLine();
+        String password;
+
+        while (true) {
+
+            System.out.print("Enter Password: ");
+
+            password =
+                    sc.nextLine();
+
+            if (password.length() < 4) {
+
+                System.out.println(
+                        "Password must be at least 4 characters."
+                );
+
+                continue;
+            }
+
+            if (!password.matches(".*[A-Z].*")) {
+
+                System.out.println(
+                        "Password needs an uppercase letter."
+                );
+
+                continue;
+            }
+
+            if (!password.matches(".*[a-z].*")) {
+
+                System.out.println(
+                        "Password needs a lowercase letter."
+                );
+
+                continue;
+            }
+
+            if (!password.matches(".*\\d.*")) {
+
+                System.out.println(
+                        "Password needs a digit."
+                );
+
+                continue;
+            }
+
+            break;
+        }
 
         if (isAdmin) {
             return new AdminUser(
@@ -132,7 +248,6 @@ public class AuthMenuHandler {
                     password
             );
         }
-
         return new StudentUser(
                 userIdCounter++,
                 name,
