@@ -22,4 +22,12 @@ public interface AuthOperations {
                     String name,
                     String username,
                     String password);
+    void changePassword(User user,
+                        String currentPassword,
+                        String newPassword);
+
+    void forgotPassword(ArrayList<User> users,
+                        String username,
+                        String securityAnswer,
+                        String newPassword);
 }

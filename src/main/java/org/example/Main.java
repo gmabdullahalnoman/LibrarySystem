@@ -27,7 +27,7 @@ public class Main {
                 new AdminMenuHandler(library, userService);
 
         UserMenuHandler userMenu =
-                new UserMenuHandler(library);
+                new UserMenuHandler(library, authService);
 
         ArrayList<User> users = new ArrayList<>();
 

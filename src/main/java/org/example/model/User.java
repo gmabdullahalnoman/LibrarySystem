@@ -20,7 +20,9 @@ public class User extends Person {
     private int totalBorrowed;
     private int totalReturned;
     private final String username;
-    private final String password;
+    private String password;
+    private String securityQuestion;
+    private String securityAnswer;
     public User(int userId,
                 String name,
                 String username,
@@ -275,6 +277,21 @@ public class User extends Person {
 
     public String getPassword() {
         return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public String getSecurityQuestion() {
+        return securityQuestion;
+    }
+    public void setSecurityQuestion(String securityQuestion) {
+        this.securityQuestion = securityQuestion;
+    }
+    public String getSecurityAnswer() {
+        return securityAnswer;
+    }
+    public void setSecurityAnswer(String securityAnswer) {
+        this.securityAnswer = securityAnswer;
     }
     // HISTORY
     public int getTotalBorrowed() {

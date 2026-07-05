@@ -4,15 +4,18 @@ import org.example.model.User;
 import org.example.exception.BookNotFoundException;
 import org.example.exception.InvalidOperationException;
 import org.example.util.InputUtil;
+import org.example.service.AuthService;
 
 import java.util.Scanner;
 
 public class UserMenuHandler {
 
     private final LibraryService library;
+    private final AuthService authService;
 
-    public UserMenuHandler(LibraryService library) {
+    public UserMenuHandler(LibraryService library, AuthService authService) {
         this.library = library;
+        this.authService = authService;
     }
 
     public User handleUserMenu(User currentUser,
@@ -47,9 +50,9 @@ public class UserMenuHandler {
                 "6. Transaction History");
 
         System.out.printf("%-25s %-25s %-25s%n",
-                "7. Logout",
-                "0. Exit",
-                "");
+                "7. Change Password",
+                "8. Logout",
+                "0. Exit");
 
         System.out.print("Choice: ");
         int choice = InputUtil.safeIntInput(sc);
@@ -103,6 +106,16 @@ public class UserMenuHandler {
                 break;
 
             case 7:
+                System.out.print("Current Password: ");
+                String currentPass = sc.nextLine();
+
+                System.out.print("New Password: ");
+                String newPass = sc.nextLine();
+
+                authService.changePassword(currentUser, currentPass, newPass);
+                break;
+
+            case 8:
                 return null;
 
             case 0:

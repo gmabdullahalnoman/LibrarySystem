@@ -135,4 +135,68 @@ public class AuthService implements AuthOperations {
 
         return null;
     }
+    @Override
+    public void changePassword(User user,
+                               String currentPassword,
+                               String newPassword) {
+
+        if (user == null) {
+            System.out.println("Invalid user.");
+            return;
+        }
+
+        if (!user.getPassword().equals(currentPassword)) {
+            System.out.println("Current password is incorrect.");
+            return;
+        }
+
+        if (currentPassword.equals(newPassword)) {
+            System.out.println("New password cannot be same as current password.");
+            return;
+        }
+
+        user.setPassword(newPassword);
+
+        System.out.println("Password changed successfully.");
+    }
+    @Override
+    public void forgotPassword(ArrayList<User> users,
+                               String username,
+                               String securityAnswer,
+                               String newPassword) {
+
+        User user = findUserByUsername(users, username);
+
+        if (user == null) {
+            System.out.println("User not found.");
+            return;
+        }
+
+        if (user.getSecurityQuestion() == null ||
+                user.getSecurityAnswer() == null) {
+
+            System.out.println("Security question not set for this account.");
+            return;
+        }
+
+        String storedAnswer =
+                user.getSecurityAnswer().trim().toLowerCase();
+
+        String inputAnswer =
+                securityAnswer.trim().toLowerCase();
+
+        if (!storedAnswer.equals(inputAnswer)) {
+            System.out.println("Incorrect security answer.");
+            return;
+        }
+
+        if (user.getPassword().equals(newPassword)) {
+            System.out.println("New password cannot be same as old password.");
+            return;
+        }
+
+        user.setPassword(newPassword);
+
+        System.out.println("Password reset successfully.");
+    }
 }

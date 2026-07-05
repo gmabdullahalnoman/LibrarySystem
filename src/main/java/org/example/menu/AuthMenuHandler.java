@@ -34,9 +34,10 @@ public class AuthMenuHandler {
         System.out.printf("%-25s %-25s%n",
                 "1. Register Student",
                 "2. Register Admin");
-
         System.out.printf("%-25s %-25s%n",
                 "3. Login",
+                "4. Forgot Password");
+        System.out.printf("%-25s%n",
                 "0. Exit");
 
         System.out.print("Choice: ");
@@ -57,6 +58,10 @@ public class AuthMenuHandler {
 
             case 3:
                 return login(users, sc);
+
+            case 4:
+                forgotPassword(users, sc);
+                break;
 
             case 0:
                 System.exit(0);
@@ -254,5 +259,39 @@ public class AuthMenuHandler {
                 username,
                 password
         );
+    }
+    private void forgotPassword(ArrayList<User> users, Scanner sc) {
+
+        System.out.print("Enter Username: ");
+        String username = sc.nextLine();
+
+        User user = null;
+
+        for (User u : users) {
+            if (u.getUsername().equalsIgnoreCase(username)) {
+                user = u;
+                break;
+            }
+        }
+
+        if (user == null) {
+            System.out.println("User not found.");
+            return;
+        }
+
+        if (user.getSecurityQuestion() == null) {
+            System.out.println("No security question set for this account.");
+            return;
+        }
+
+        System.out.println("Security Question: " + user.getSecurityQuestion());
+
+        System.out.print("Enter Answer: ");
+        String answer = sc.nextLine();
+
+        System.out.print("Enter New Password: ");
+        String newPassword = sc.nextLine();
+
+        authService.forgotPassword(users, username, answer, newPassword);
     }
 }
