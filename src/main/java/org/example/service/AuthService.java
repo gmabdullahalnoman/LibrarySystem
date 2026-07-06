@@ -6,6 +6,7 @@ import org.example.interfaces.AuthOperations;
 import org.example.model.AdminUser;
 import org.example.model.StudentUser;
 import org.example.model.User;
+import java.io.Console;
 
 import java.util.ArrayList;
 
@@ -192,6 +193,39 @@ public class AuthService implements AuthOperations {
 
         if (user.getPassword().equals(newPassword)) {
             System.out.println("New password cannot be same as old password.");
+            return;
+        }
+
+        // 🔐 PASSWORD INPUT MASKING (SAFE UPGRADE)
+        Console console = System.console();
+
+        System.out.print("Enter New Password: ");
+
+        if (console != null) {
+            newPassword = new String(console.readPassword());
+        } else {
+            // IDE fallback (IntelliJ / VS Code)
+            newPassword = new java.util.Scanner(System.in).nextLine();
+        }
+
+        // 🔐 VALIDATION (same as register)
+        if (newPassword.length() < 4) {
+            System.out.println("Password must be at least 4 characters.");
+            return;
+        }
+
+        if (!newPassword.matches(".*[A-Z].*")) {
+            System.out.println("Password needs an uppercase letter.");
+            return;
+        }
+
+        if (!newPassword.matches(".*[a-z].*")) {
+            System.out.println("Password needs a lowercase letter.");
+            return;
+        }
+
+        if (!newPassword.matches(".*\\d.*")) {
+            System.out.println("Password needs a digit.");
             return;
         }
 

@@ -6,6 +6,7 @@ import org.example.model.StudentUser;
 import org.example.model.User;
 import org.example.exception.AuthenticationException;
 import org.example.util.InputUtil;
+import java.io.Console;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -134,20 +135,16 @@ public class AuthMenuHandler {
 
             String[] parts = name.split("\\s+");
 
-            StringBuilder builder =
-                    new StringBuilder();
+            StringBuilder builder = new StringBuilder();
 
             for (String part : parts) {
 
                 builder.append(
-                        Character.toUpperCase(
-                                part.charAt(0)
-                        )
+                        Character.toUpperCase(part.charAt(0))
                 );
 
                 builder.append(
-                        part.substring(1)
-                                .toLowerCase()
+                        part.substring(1).toLowerCase()
                 );
 
                 builder.append(" ");
@@ -157,14 +154,14 @@ public class AuthMenuHandler {
 
             break;
         }
+
         String username;
 
         while (true) {
 
             System.out.print("Enter Username: ");
 
-            username =
-                    sc.nextLine().trim();
+            username = sc.nextLine().trim();
 
             if (username.length() < 4) {
 
@@ -196,69 +193,106 @@ public class AuthMenuHandler {
             break;
         }
 
-
         String password;
 
         while (true) {
 
+            Console console = System.console();
+
             System.out.print("Enter Password: ");
 
-            password =
-                    sc.nextLine();
+            if (console != null) {
+                char[] passArray = console.readPassword();
+                password = new String(passArray);
+            } else {
+                // fallback (IDE like IntelliJ/VS Code)
+                password = sc.nextLine();
+            }
 
             if (password.length() < 4) {
-
-                System.out.println(
-                        "Password must be at least 4 characters."
-                );
-
+                System.out.println("Password must be at least 4 characters.");
                 continue;
             }
 
             if (!password.matches(".*[A-Z].*")) {
-
-                System.out.println(
-                        "Password needs an uppercase letter."
-                );
-
+                System.out.println("Password needs an uppercase letter.");
                 continue;
             }
 
             if (!password.matches(".*[a-z].*")) {
-
-                System.out.println(
-                        "Password needs a lowercase letter."
-                );
-
+                System.out.println("Password needs a lowercase letter.");
                 continue;
             }
 
             if (!password.matches(".*\\d.*")) {
-
-                System.out.println(
-                        "Password needs a digit."
-                );
-
+                System.out.println("Password needs a digit.");
                 continue;
             }
 
             break;
         }
 
+        User user;
+
         if (isAdmin) {
-            return new AdminUser(
+
+            user = new AdminUser(
                     userIdCounter++,
                     name,
                     username,
                     password
             );
+
+        } else {
+
+            user = new StudentUser(
+                    userIdCounter++,
+                    name,
+                    username,
+                    password
+            );
+
+            System.out.println("\nChoose Security Question:");
+            System.out.println("1. What is your first school?");
+            System.out.println("2. What is your favourite colour?");
+            System.out.println("3. What is your mother's name?");
+            System.out.print("Choice: ");
+
+            int choice = InputUtil.safeIntInput(sc);
+
+            if (choice == -1) {
+                return null;
+            }
+
+            String question;
+
+            switch (choice) {
+
+                case 1:
+                    question = "What is your first school?";
+                    break;
+
+                case 2:
+                    question = "What is your favourite colour?";
+                    break;
+
+                case 3:
+                    question = "What is your mother's name?";
+                    break;
+
+                default:
+                    System.out.println("Invalid choice.");
+                    return null;
+            }
+
+            System.out.print("Answer: ");
+            String answer = sc.nextLine().trim();
+
+            user.setSecurityQuestion(question);
+            user.setSecurityAnswer(answer);
         }
-        return new StudentUser(
-                userIdCounter++,
-                name,
-                username,
-                password
-        );
+
+        return user;
     }
     private void forgotPassword(ArrayList<User> users, Scanner sc) {
 
@@ -272,6 +306,10 @@ public class AuthMenuHandler {
                 user = u;
                 break;
             }
+        }
+        if (user instanceof AdminUser) {
+            System.out.println("Forgot Password is available only for student accounts.");
+            return;
         }
 
         if (user == null) {
@@ -291,7 +329,6 @@ public class AuthMenuHandler {
 
         System.out.print("Enter New Password: ");
         String newPassword = sc.nextLine();
-
         authService.forgotPassword(users, username, answer, newPassword);
     }
 }
